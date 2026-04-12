@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+
+<style>
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../assets/fonts/Montserrat-Regular.ttf');
+}
+
+body {
+  margin: 0;
+  font-family: Montserrat, sans-serif;
+}
+
+.card {
+  width: 1080px;
+  height: 1080px;
+  background: #f5f6f8;
+  position: relative;
+  padding: 60px;
+  box-sizing: border-box;
+}
+
+.header {
+  font-size: 26px;
+  color: #1f4fa3;
+  font-weight: 600;
+}
+
+.route {
+  font-size: 54px;
+  font-weight: 700;
+  color: #1f4fa3;
+  margin-top: 10px;
+}
+
+.costs {
+  font-size: 28px;
+  margin-top: 10px;
+  color: #333;
+  line-height: 1.3;
+}
+
+.dates {
+  font-size: 26px;
+  margin-top: 20px;
+  color: #444;
+  line-height: 1.4;
+}
+
+.block {
+  margin-bottom: 40px;
+}
+
+.return {
+  margin-top: 40px;
+}
+
+.destination {
+  position: absolute;
+  top: 60px;
+  right: 60px;
+  width: 320px;
+  height: 320px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.destination img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plane {
+  position: absolute;
+  right: 40px;
+  top: 300px;
+  width: 260px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1f4fa3;
+  color: white;
+  padding: 20px 60px;
+  font-size: 18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="header">{{title}}</div>
+
+<div class="block">
+<div class="route">{{outbound_route}}</div>
+
+<div class="costs">
+{{outbound_costs}}
+</div>
+
+<div class="dates">
+{{outbound_dates}}
+</div>
+</div>
+
+<div class="block return">
+<div class="route">{{return_route}}</div>
+
+<div class="costs">
+{{return_costs}}
+</div>
+
+<div class="dates">
+{{return_dates}}
+</div>
+</div>
+
+<div class="destination">
+<img src="../assets/destinations/{{destination}}" />
+</div>
+
+<img class="plane" src="../assets/plane/plane.png" />
+
+<div class="footer">
+{{footer}}
+</div>
+
+</div>
+
+</body>
+</html>
