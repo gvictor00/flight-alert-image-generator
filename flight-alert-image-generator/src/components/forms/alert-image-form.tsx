@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { brandThemes } from '@/lib/templates/themes';
 import { samplePayload } from '@/lib/templates/sample-data';
-import { applyTemplateToPayload, clonePayload } from '@/lib/templates/template-helpers';
 import type { AlertImagePayload, JourneyBlock, TemplateType } from '@/lib/templates/types';
 import { createId } from '@/lib/utils/ids';
 import { AlertImagePreview } from '@/components/preview/alert-image-preview';
@@ -33,7 +32,7 @@ function updateJourneyBlock(block: JourneyBlock, field: 'costs' | 'dates', value
 }
 
 export function AlertImageForm() {
-  const [payload, setPayload] = useState<AlertImagePayload>(() => clonePayload(samplePayload));
+  const [payload, setPayload] = useState<AlertImagePayload>(samplePayload);
   const [renderResult, setRenderResult] = useState<RenderResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
@@ -94,7 +93,11 @@ export function AlertImageForm() {
                     value={payload.template}
                     onChange={(event) => {
                       const template = event.target.value as TemplateType;
-                      setPayload((current) => applyTemplateToPayload(current, template));
+                      setPayload((current) => ({
+                        ...current,
+                        template,
+                        inbound: template === 'one-way' ? undefined : current.inbound ?? samplePayload.inbound
+                      }));
                     }}
                   >
                     <option value="one-way">Somente ida</option>
@@ -199,7 +202,7 @@ export function AlertImageForm() {
                   type="button"
                   className="button secondary"
                   onClick={() => {
-                    setPayload(clonePayload(samplePayload));
+                    setPayload(samplePayload);
                     setRenderResult(null);
                     setErrorMessage(null);
                   }}

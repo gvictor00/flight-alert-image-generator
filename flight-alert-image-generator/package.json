@@ -10,8 +10,8 @@
     "playwright:install": "playwright install chromium"
   },
   "dependencies": {
-    "next": "^15.5.15",
-    "playwright": "^1.59.1",
+    "next": "15.5.0",
+    "playwright": "1.54.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "zod": "3.23.8"

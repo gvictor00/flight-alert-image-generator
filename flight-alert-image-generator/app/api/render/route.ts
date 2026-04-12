@@ -1,6 +1,3 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
 import path from 'path';
 import { NextResponse } from 'next/server';
 import { alertImageSchema } from '@/lib/validation/alert-image-schema';

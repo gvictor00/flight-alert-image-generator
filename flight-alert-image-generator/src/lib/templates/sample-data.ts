@@ -1,6 +1,6 @@
 import type { AlertImagePayload } from '@/lib/templates/types';
 
-const samplePayloadSeed: AlertImagePayload = {
+export const samplePayload: AlertImagePayload = {
   template: 'round-trip',
   title: 'EXECUTIVA QATAR AIRWAYS',
   themeKey: 'executiva-com-milhas',
@@ -34,6 +34,3 @@ const samplePayloadSeed: AlertImagePayload = {
     generatedAtLine: 'Pesquisa realizada no dia 05 de Abril.'
   }
 };
-
-
-export const samplePayload: AlertImagePayload = structuredClone(samplePayloadSeed);
