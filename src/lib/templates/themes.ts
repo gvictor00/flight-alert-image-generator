@@ -41,9 +41,9 @@ export const brandThemes: BrandTheme[] = [
     footerColor: '#121e3e',
     footerTextColor: '#ffffff',
     footerOverlayLayout: {
-      primaryLine: { x: 25, y: 873, width: 596 },
-      secondaryLine: { x: 25, y: 896, width: 596 },
-      generatedAtLine: { x: 25, y: 919, width: 596 }
+      primaryLine: { x: 25, y: 987, width: 596 },
+      secondaryLine: { x: 25, y: 1007, width: 596 },
+      generatedAtLine: { x: 25, y: 1050, width: 596 }
     },
     mainTextOverlay: {
       x: 36,
