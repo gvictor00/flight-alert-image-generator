@@ -48,6 +48,28 @@ export interface MainTextOverlayLayout {
   roundTripY: number;
 }
 
+export type FontVariantKey =
+  | 'thin'
+  | 'extra-light'
+  | 'light'
+  | 'regular'
+  | 'medium'
+  | 'semi-bold'
+  | 'bold'
+  | 'extra-bold'
+  | 'black';
+
+export interface ThemeTextFontVariants {
+  title: FontVariantKey;
+  route: FontVariantKey;
+  cost: FontVariantKey;
+  dates: FontVariantKey;
+  orLabel: FontVariantKey;
+  footerPrimary: FontVariantKey;
+  footerSecondary: FontVariantKey;
+  footerDate: FontVariantKey;
+}
+
 export interface BrandTheme {
   key: string;
   name: string;
@@ -59,6 +81,7 @@ export interface BrandTheme {
   footerOverlayLayout: FooterOverlayLayout;
   mainTextOverlay: MainTextOverlayLayout;
   backgroundImage: string;
+  textFontVariants: ThemeTextFontVariants;
 }
 
 export interface AlertImagePayload {

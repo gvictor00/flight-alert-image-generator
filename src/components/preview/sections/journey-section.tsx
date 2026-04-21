@@ -5,27 +5,39 @@ import { normalizeListText } from '@/lib/rendering/formatters';
 interface JourneySectionProps {
   block: JourneyBlock;
   primaryColor: string;
+  routeFontWeight: number;
+  costFontWeight: number;
+  datesFontWeight: number;
+  orLabelFontWeight: number;
   dense?: boolean;
 }
 
-export function JourneySection({ block, primaryColor, dense = false }: JourneySectionProps) {
+export function JourneySection({
+  block,
+  primaryColor,
+  routeFontWeight,
+  costFontWeight,
+  datesFontWeight,
+  orLabelFontWeight,
+  dense = false
+}: JourneySectionProps) {
   const costs = normalizeListText(block.costs);
   const dates = normalizeListText(block.dates);
 
   return (
     <section style={{ ...styles.container, marginBottom: dense ? 34 : 46 }}>
-      <div style={{ ...styles.route, ...getRouteStyles(dense), color: primaryColor }}>{block.route}</div>
+      <div style={{ ...styles.route, ...getRouteStyles(dense), color: primaryColor, fontWeight: routeFontWeight }}>{block.route}</div>
 
       <div style={{ ...styles.costList, gap: dense ? 6 : 8, marginBottom: dense ? 18 : 22 }}>
         {costs.map((item, index) => (
           <div key={`${block.route}-cost-${index}`} style={{ ...styles.costRow, gap: dense ? 6 : 8 }}>
-            {index > 0 ? <div style={{ ...styles.orRow, fontSize: dense ? 18 : 20 }}>OU</div> : null}
-            <div style={{ ...styles.costText, ...getCostStyles(dense) }}>{item}</div>
+            {index > 0 ? <div style={{ ...styles.orRow, fontSize: dense ? 18 : 20, fontWeight: orLabelFontWeight }}>OU</div> : null}
+            <div style={{ ...styles.costText, ...getCostStyles(dense), fontWeight: costFontWeight }}>{item}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ ...styles.dateList, ...getDateStyles(dense) }}>
+      <div style={{ ...styles.dateList, ...getDateStyles(dense), fontWeight: datesFontWeight }}>
         {dates.map((item, index) => (
           <div key={`${block.route}-date-${index}`}>{item}</div>
         ))}
@@ -79,7 +91,6 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid'
   },
   route: {
-    fontWeight: 700,
     letterSpacing: '-0.04em',
     lineHeight: 1.05,
     wordBreak: 'break-word'
@@ -91,16 +102,13 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid'
   },
   orRow: {
-    fontWeight: 500,
     letterSpacing: '0.08em'
   },
   costText: {
-    fontWeight: 700,
     wordBreak: 'break-word'
   },
   dateList: {
     display: 'grid',
-    fontWeight: 700,
     maxWidth: 660,
     wordBreak: 'break-word'
   }

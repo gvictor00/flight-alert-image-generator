@@ -1,7 +1,7 @@
 import path from 'path';
 import { pathToFileURL } from 'url';
 import { normalizeListText } from '@/lib/rendering/formatters';
-import { getBrandTheme } from '@/lib/templates/themes';
+import { getBrandTheme, getFontWeightForVariant } from '@/lib/templates/themes';
 import type { AlertImagePayload, JourneyBlock } from '@/lib/templates/types';
 
 interface BuildRenderDocumentOptions {
@@ -75,11 +75,17 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
   const destinationImageUrl = resolveAssetUrl(payload.destinationImage, options.publicDir);
   const destinationImageStyle = `object-fit: ${payload.destinationImageSettings.fit}; transform: translate(${payload.destinationImageSettings.offsetX}px, ${payload.destinationImageSettings.offsetY}px) scale(${payload.destinationImageSettings.scale}); transform-origin: center center;`;
   const planeImageUrl = resolveAssetUrl('/assets/plane/plane-placeholder.svg', options.publicDir);
+  const textFontVariants = theme.textFontVariants;
 
+  const montserratThinUrl = resolveAssetUrl('/assets/fonts/Montserrat-Thin.ttf', options.publicDir);
+  const montserratExtraLightUrl = resolveAssetUrl('/assets/fonts/Montserrat-ExtraLight.ttf', options.publicDir);
+  const montserratLightUrl = resolveAssetUrl('/assets/fonts/Montserrat-Light.ttf', options.publicDir);
   const montserratRegularUrl = resolveAssetUrl('/assets/fonts/Montserrat-Regular.ttf', options.publicDir);
   const montserratMediumUrl = resolveAssetUrl('/assets/fonts/Montserrat-Medium.ttf', options.publicDir);
+  const montserratSemiBoldUrl = resolveAssetUrl('/assets/fonts/Montserrat-SemiBold.ttf', options.publicDir);
   const montserratBoldUrl = resolveAssetUrl('/assets/fonts/Montserrat-Bold.ttf', options.publicDir);
   const montserratExtraBoldUrl = resolveAssetUrl('/assets/fonts/Montserrat-ExtraBold.ttf', options.publicDir);
+  const montserratBlackUrl = resolveAssetUrl('/assets/fonts/Montserrat-Black.ttf', options.publicDir);
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -87,6 +93,27 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
+      @font-face {
+        font-family: 'MontserratLocal';
+        src: url('${escapeCssUrl(montserratThinUrl)}') format('truetype');
+        font-style: normal;
+        font-weight: 100;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'MontserratLocal';
+        src: url('${escapeCssUrl(montserratExtraLightUrl)}') format('truetype');
+        font-style: normal;
+        font-weight: 200;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'MontserratLocal';
+        src: url('${escapeCssUrl(montserratLightUrl)}') format('truetype');
+        font-style: normal;
+        font-weight: 300;
+        font-display: swap;
+      }
       @font-face {
         font-family: 'MontserratLocal';
         src: url('${escapeCssUrl(montserratRegularUrl)}') format('truetype');
@@ -103,6 +130,13 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
       }
       @font-face {
         font-family: 'MontserratLocal';
+        src: url('${escapeCssUrl(montserratSemiBoldUrl)}') format('truetype');
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'MontserratLocal';
         src: url('${escapeCssUrl(montserratBoldUrl)}') format('truetype');
         font-style: normal;
         font-weight: 700;
@@ -115,12 +149,27 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
         font-weight: 800;
         font-display: swap;
       }
+      @font-face {
+        font-family: 'MontserratLocal';
+        src: url('${escapeCssUrl(montserratBlackUrl)}') format('truetype');
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+      }
 
       :root {
         --background-color: ${theme.backgroundColor};
         --primary-color: ${theme.primaryColor};
         --text-color: ${theme.textColor};
         --footer-text-color: ${theme.footerTextColor};
+        --font-weight-title: ${getFontWeightForVariant(textFontVariants.title)};
+        --font-weight-route: ${getFontWeightForVariant(textFontVariants.route)};
+        --font-weight-cost: ${getFontWeightForVariant(textFontVariants.cost)};
+        --font-weight-dates: ${getFontWeightForVariant(textFontVariants.dates)};
+        --font-weight-or: ${getFontWeightForVariant(textFontVariants.orLabel)};
+        --font-weight-footer-primary: ${getFontWeightForVariant(textFontVariants.footerPrimary)};
+        --font-weight-footer-secondary: ${getFontWeightForVariant(textFontVariants.footerSecondary)};
+        --font-weight-footer-date: ${getFontWeightForVariant(textFontVariants.footerDate)};
       }
 
       * { box-sizing: border-box; }
@@ -168,7 +217,7 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
         margin: 0 0 22px;
         color: var(--primary-color);
         font-size: 31px;
-        font-weight: 500;
+        font-weight: var(--font-weight-title);
         line-height: 1.1;
         letter-spacing: -0.03em;
         text-transform: uppercase;
@@ -187,7 +236,7 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
         max-width: 660px;
         margin-bottom: 16px;
         font-size: 54px;
-        font-weight: 700;
+        font-weight: var(--font-weight-route);
         line-height: 1.05;
         letter-spacing: -0.04em;
         word-break: break-word;
@@ -215,7 +264,7 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
       }
       .journey__or {
         font-size: 20px;
-        font-weight: 500;
+        font-weight: var(--font-weight-or);
         letter-spacing: 0.08em;
       }
       .journey--dense .journey__or {
@@ -224,7 +273,7 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
       .journey__cost-text {
         font-size: 28px;
         line-height: 1.24;
-        font-weight: 700;
+        font-weight: var(--font-weight-cost);
         word-break: break-word;
       }
       .journey--dense .journey__cost-text {
@@ -237,7 +286,7 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
         max-width: 660px;
         font-size: 24px;
         line-height: 1.3;
-        font-weight: 700;
+        font-weight: var(--font-weight-dates);
         word-break: break-word;
       }
       .journey--dense .journey__date-list {
@@ -290,12 +339,13 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
       .footer-line--secondary {
         font-size: 17px;
         line-height: 1.25;
-        font-weight: 700;
       }
+      .footer-line--primary { font-weight: var(--font-weight-footer-primary); }
+      .footer-line--secondary { font-weight: var(--font-weight-footer-secondary); }
       .footer-line--date {
         font-size: 15px;
         line-height: 1.2;
-        font-weight: 500;
+        font-weight: var(--font-weight-footer-date);
       }
     </style>
   </head>

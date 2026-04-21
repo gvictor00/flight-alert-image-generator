@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { getBrandTheme } from '@/lib/templates/themes';
+import { getBrandTheme, getFontWeightForVariant } from '@/lib/templates/themes';
 import type { AlertImagePayload, DestinationImageSettings, FooterTextPosition } from '@/lib/templates/types';
 
 interface PreviewScaffoldProps {
@@ -10,6 +10,7 @@ interface PreviewScaffoldProps {
 export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
   const theme = getBrandTheme(payload.themeKey);
   const footerLayout = theme.footerOverlayLayout;
+  const footerFontWeights = theme.textFontVariants;
 
   return (
     <div style={styles.scaleWrapper}>
@@ -33,13 +34,34 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           </div>
         </section>
 
-        <div style={{ ...styles.footerStrongLine, ...toFooterLineStyle(footerLayout.primaryLine), color: theme.footerTextColor }}>
+        <div
+          style={{
+            ...styles.footerStrongLine,
+            ...toFooterLineStyle(footerLayout.primaryLine),
+            color: theme.footerTextColor,
+            fontWeight: getFontWeightForVariant(footerFontWeights.footerPrimary)
+          }}
+        >
           {payload.footer.primaryLine}
         </div>
-        <div style={{ ...styles.footerStrongLine, ...toFooterLineStyle(footerLayout.secondaryLine), color: theme.footerTextColor }}>
+        <div
+          style={{
+            ...styles.footerStrongLine,
+            ...toFooterLineStyle(footerLayout.secondaryLine),
+            color: theme.footerTextColor,
+            fontWeight: getFontWeightForVariant(footerFontWeights.footerSecondary)
+          }}
+        >
           {payload.footer.secondaryLine}
         </div>
-        <div style={{ ...styles.footerDateLine, ...toFooterLineStyle(footerLayout.generatedAtLine), color: theme.footerTextColor }}>
+        <div
+          style={{
+            ...styles.footerDateLine,
+            ...toFooterLineStyle(footerLayout.generatedAtLine),
+            color: theme.footerTextColor,
+            fontWeight: getFontWeightForVariant(footerFontWeights.footerDate)
+          }}
+        >
           {payload.footer.generatedAtLine}
         </div>
       </div>
@@ -146,8 +168,7 @@ const styles: Record<string, CSSProperties> = {
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
     fontSize: 17,
-    lineHeight: 1.25,
-    fontWeight: 700
+    lineHeight: 1.25
   },
   footerDateLine: {
     position: 'absolute',
@@ -155,7 +176,6 @@ const styles: Record<string, CSSProperties> = {
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
     fontSize: 15,
-    lineHeight: 1.2,
-    fontWeight: 500
+    lineHeight: 1.2
   }
 };

@@ -225,19 +225,11 @@ export function AlertImageForm() {
               />
             </Field>
 
-            <Field label="Imagem do destino" hint="Use caminho relativo em /public ou URL absoluta.">
-              <input
-                className={inputClassName}
-                value={payload.destinationImage}
-                onChange={(event) => setPayload((current) => ({ ...current, destinationImage: event.target.value }))}
-              />
-            </Field>
-
             <div className={sectionClassName}>
               <h3 className="text-base font-semibold text-slate-900">Ajuste da imagem de destino</h3>
               <Field
                 label="Biblioteca de destinos"
-                hint="Lista automatica da pasta public/assets/destinations. Escolha uma opcao ou mantenha manual."
+                hint="Lista automatica da pasta public/assets/destinations. Escolha uma opcao ou use upload manual."
               >
                 <select
                   className={inputClassName}
@@ -254,7 +246,7 @@ export function AlertImageForm() {
                     }));
                   }}
                 >
-                  <option value={manualDestinationValue}>Manual / URL / upload</option>
+                  <option value={manualDestinationValue}>Manual / upload</option>
                   {destinationOptions.map((option) => (
                     <option key={option.path} value={option.path}>
                       {option.fileName}
