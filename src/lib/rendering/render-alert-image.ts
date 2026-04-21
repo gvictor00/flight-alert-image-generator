@@ -6,7 +6,7 @@ import type { AlertImagePayload } from '@/lib/templates/types';
 
 export async function renderAlertImage(payload: AlertImagePayload, fileName: string): Promise<string> {
   const publicDir = path.join(process.cwd(), 'public');
-  const html = buildRenderDocument(payload, { publicDir });
+  const html = await buildRenderDocument(payload, { publicDir });
   const browser = await chromium.launch({ headless: true });
 
   try {

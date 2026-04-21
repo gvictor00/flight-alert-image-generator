@@ -1,5 +1,12 @@
 [
   {
+    "id": "a713f69d-d304-4a96-a9bc-9c54eddcf475",
+    "template": "one-way",
+    "route": "São Paulo - Doha",
+    "createdAt": "2026-04-21T19:21:36.053Z",
+    "payload": "{\"template\":\"one-way\",\"title\":\"EXECUTIVA QATAR AIRWAYS\",\"themeKey\":\"executiva-com-milhas\",\"destinationImage\":\"/assets/destinations/BKK.jpg\",\"destinationImageSettings\":{\"fit\":\"cover\",\"scale\":1,\"offsetX\":0,\"offsetY\":0},\"outbound\":{\"route\":\"São Paulo - Doha\",\"costs\":[{\"id\":\"outbound-cost-1-mmffj99c\",\"value\":\"70K Milhas Avios Qatar + R$ 1.108,24\"},{\"id\":\"outbound-cost-2-huse5rgv\",\"value\":\"94,5K Milhas Avios Qatar + R$ 1.108,24\"}],\"dates\":[{\"id\":\"outbound-date-1-63csdlnk\",\"value\":\"MAI: 31(1)\"},{\"id\":\"outbound-date-2-btfnrgrz\",\"value\":\"JUN: 1(2), 2(2), 4(1), 11(1)\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para 1 passageiro.\",\"generatedAtLine\":\"Pesquisa realizada no dia 05 de Abril.\"}}"
+  },
+  {
     "id": "993b8758-d4cf-45cf-b098-147101277fc1",
     "template": "round-trip",
     "route": "São Paulo - Doha",

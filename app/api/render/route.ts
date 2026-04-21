@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import path from 'path';
+import { promises as fs } from 'fs';
 import { NextResponse } from 'next/server';
 import { alertImageSchema } from '@/lib/validation/alert-image-schema';
 import { renderAlertImage } from '@/lib/rendering/render-alert-image';
@@ -25,9 +25,16 @@ export async function POST(request: Request) {
       payload: JSON.stringify(payload)
     });
 
-    return NextResponse.json({
-      historyId,
-      imagePath: path.relative(process.cwd(), absolutePath)
+    const pngBuffer = await fs.readFile(absolutePath);
+
+    return new Response(pngBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/png',
+        'Content-Disposition': `attachment; filename="${fileName}"`,
+        'Cache-Control': 'no-store',
+        'X-History-Id': historyId
+      }
     });
   } catch (error) {
     console.error(error);

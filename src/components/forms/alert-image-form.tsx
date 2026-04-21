@@ -10,7 +10,7 @@ import type { AlertImagePayload, JourneyBlock, TemplateType } from '@/lib/templa
 import { createId } from '@/lib/utils/ids';
 
 interface RenderResponse {
-  imagePath: string;
+  fileName: string;
   historyId: string;
 }
 
@@ -29,6 +29,24 @@ const textAreaClassName = `${inputClassName} min-h-[96px] resize-y`;
 const sectionClassName = 'grid gap-4 rounded-2xl border border-slate-200 p-4';
 const previewBaseSize = 1080;
 const manualDestinationValue = '__manual__';
+
+function parseFileNameFromContentDisposition(headerValue: string | null): string | null {
+  if (!headerValue) {
+    return null;
+  }
+
+  const utf8Match = headerValue.match(/filename\*=UTF-8''([^;]+)/i);
+  if (utf8Match?.[1]) {
+    try {
+      return decodeURIComponent(utf8Match[1]);
+    } catch {
+      return utf8Match[1];
+    }
+  }
+
+  const simpleMatch = headerValue.match(/filename=\"?([^\";]+)\"?/i);
+  return simpleMatch?.[1] ?? null;
+}
 
 function toTextarea(items: Array<{ value: string }>): string {
   return items.map((item) => item.value).join('\n');
@@ -154,14 +172,30 @@ export function AlertImageForm() {
         body: JSON.stringify(payload)
       });
 
-      const body = await response.json();
-
       if (!response.ok) {
+        const body = (await response.json().catch(() => ({}))) as { error?: string };
         setErrorMessage(body.error ?? 'Nao foi possivel renderizar a imagem.');
         return;
       }
 
-      setRenderResult(body);
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get('Content-Disposition');
+      const fileName = parseFileNameFromContentDisposition(contentDisposition) ?? `alert-${Date.now()}.png`;
+      const historyId = response.headers.get('X-History-Id') ?? crypto.randomUUID();
+
+      const objectUrl = URL.createObjectURL(blob);
+      try {
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = fileName;
+        document.body.append(link);
+        link.click();
+        link.remove();
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+      }
+
+      setRenderResult({ fileName, historyId });
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Erro inesperado ao renderizar.');
     } finally {
@@ -407,7 +441,7 @@ export function AlertImageForm() {
             ) : null}
             {renderResult ? (
               <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700">
-                Render concluido. Arquivo salvo em <strong>{renderResult.imagePath}</strong>.
+                Render concluido. Download iniciado para <strong>{renderResult.fileName}</strong>.
               </div>
             ) : null}
           </div>

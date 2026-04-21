@@ -1,5 +1,5 @@
 import path from 'path';
-import { pathToFileURL } from 'url';
+import { promises as fs } from 'fs';
 import { normalizeListText } from '@/lib/rendering/formatters';
 import { getBrandTheme, getFontWeightForVariant } from '@/lib/templates/themes';
 import type { AlertImagePayload, JourneyBlock } from '@/lib/templates/types';
@@ -21,7 +21,26 @@ function escapeCssUrl(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
 
-function resolveAssetUrl(source: string, publicDir: string): string {
+function getMimeTypeFromExt(extension: string): string {
+  const ext = extension.toLowerCase();
+  if (ext === '.png') return 'image/png';
+  if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
+  if (ext === '.webp') return 'image/webp';
+  if (ext === '.svg') return 'image/svg+xml';
+  if (ext === '.ttf') return 'font/ttf';
+  if (ext === '.otf') return 'font/otf';
+  if (ext === '.woff') return 'font/woff';
+  if (ext === '.woff2') return 'font/woff2';
+  return 'application/octet-stream';
+}
+
+async function toDataUrlFromFile(filePath: string): Promise<string> {
+  const bytes = await fs.readFile(filePath);
+  const mimeType = getMimeTypeFromExt(path.extname(filePath));
+  return `data:${mimeType};base64,${bytes.toString('base64')}`;
+}
+
+async function resolveAssetUrl(source: string, publicDir: string): Promise<string> {
   if (source.startsWith('//')) {
     return `https:${source}`;
   }
@@ -34,7 +53,7 @@ function resolveAssetUrl(source: string, publicDir: string): string {
   const relativeAssetPath = normalizedSource.startsWith('/') ? normalizedSource.slice(1) : normalizedSource;
   const absoluteAssetPath = path.join(publicDir, relativeAssetPath);
 
-  return pathToFileURL(absoluteAssetPath).href;
+  return toDataUrlFromFile(absoluteAssetPath);
 }
 
 function renderJourneyBlock(block: JourneyBlock, options: { primaryColor: string; dense?: boolean }): string {
@@ -62,7 +81,7 @@ function renderJourneyBlock(block: JourneyBlock, options: { primaryColor: string
     </section>`;
 }
 
-export function buildRenderDocument(payload: AlertImagePayload, options: BuildRenderDocumentOptions): string {
+export async function buildRenderDocument(payload: AlertImagePayload, options: BuildRenderDocumentOptions): Promise<string> {
   const theme = getBrandTheme(payload.themeKey);
   const outboundDense = payload.template === 'round-trip';
   const inbound = payload.template === 'round-trip' && payload.inbound
@@ -71,21 +90,21 @@ export function buildRenderDocument(payload: AlertImagePayload, options: BuildRe
 
   const leftColumnClass = payload.template === 'one-way' ? 'left-column left-column--one-way' : 'left-column';
 
-  const themeBackgroundImageUrl = resolveAssetUrl(theme.backgroundImage, options.publicDir);
-  const destinationImageUrl = resolveAssetUrl(payload.destinationImage, options.publicDir);
+  const themeBackgroundImageUrl = await resolveAssetUrl(theme.backgroundImage, options.publicDir);
+  const destinationImageUrl = await resolveAssetUrl(payload.destinationImage, options.publicDir);
   const destinationImageStyle = `object-fit: ${payload.destinationImageSettings.fit}; transform: translate(${payload.destinationImageSettings.offsetX}px, ${payload.destinationImageSettings.offsetY}px) scale(${payload.destinationImageSettings.scale}); transform-origin: center center;`;
-  const planeImageUrl = resolveAssetUrl('/assets/plane/plane-placeholder.svg', options.publicDir);
+  const planeImageUrl = await resolveAssetUrl('/assets/plane/plane-placeholder.svg', options.publicDir);
   const textFontVariants = theme.textFontVariants;
 
-  const montserratThinUrl = resolveAssetUrl('/assets/fonts/Montserrat-Thin.ttf', options.publicDir);
-  const montserratExtraLightUrl = resolveAssetUrl('/assets/fonts/Montserrat-ExtraLight.ttf', options.publicDir);
-  const montserratLightUrl = resolveAssetUrl('/assets/fonts/Montserrat-Light.ttf', options.publicDir);
-  const montserratRegularUrl = resolveAssetUrl('/assets/fonts/Montserrat-Regular.ttf', options.publicDir);
-  const montserratMediumUrl = resolveAssetUrl('/assets/fonts/Montserrat-Medium.ttf', options.publicDir);
-  const montserratSemiBoldUrl = resolveAssetUrl('/assets/fonts/Montserrat-SemiBold.ttf', options.publicDir);
-  const montserratBoldUrl = resolveAssetUrl('/assets/fonts/Montserrat-Bold.ttf', options.publicDir);
-  const montserratExtraBoldUrl = resolveAssetUrl('/assets/fonts/Montserrat-ExtraBold.ttf', options.publicDir);
-  const montserratBlackUrl = resolveAssetUrl('/assets/fonts/Montserrat-Black.ttf', options.publicDir);
+  const montserratThinUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Thin.ttf', options.publicDir);
+  const montserratExtraLightUrl = await resolveAssetUrl('/assets/fonts/Montserrat-ExtraLight.ttf', options.publicDir);
+  const montserratLightUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Light.ttf', options.publicDir);
+  const montserratRegularUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Regular.ttf', options.publicDir);
+  const montserratMediumUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Medium.ttf', options.publicDir);
+  const montserratSemiBoldUrl = await resolveAssetUrl('/assets/fonts/Montserrat-SemiBold.ttf', options.publicDir);
+  const montserratBoldUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Bold.ttf', options.publicDir);
+  const montserratExtraBoldUrl = await resolveAssetUrl('/assets/fonts/Montserrat-ExtraBold.ttf', options.publicDir);
+  const montserratBlackUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Black.ttf', options.publicDir);
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
