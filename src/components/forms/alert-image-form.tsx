@@ -1,17 +1,34 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { brandThemes } from '@/lib/templates/themes';
+import type { ChangeEvent, ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AlertImagePreview } from '@/components/preview/alert-image-preview';
 import { samplePayload } from '@/lib/templates/sample-data';
 import { applyTemplateToPayload, clonePayload } from '@/lib/templates/template-helpers';
+import { brandThemes } from '@/lib/templates/themes';
 import type { AlertImagePayload, JourneyBlock, TemplateType } from '@/lib/templates/types';
 import { createId } from '@/lib/utils/ids';
-import { AlertImagePreview } from '@/components/preview/alert-image-preview';
 
 interface RenderResponse {
   imagePath: string;
   historyId: string;
 }
+
+interface DestinationOption {
+  fileName: string;
+  path: string;
+}
+
+interface DestinationsResponse {
+  items: DestinationOption[];
+}
+
+const inputClassName =
+  'w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-800 transition focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-100';
+const textAreaClassName = `${inputClassName} min-h-[96px] resize-y`;
+const sectionClassName = 'grid gap-4 rounded-2xl border border-slate-200 p-4';
+const previewBaseSize = 1080;
+const manualDestinationValue = '__manual__';
 
 function toTextarea(items: Array<{ value: string }>): string {
   return items.map((item) => item.value).join('\n');
@@ -37,8 +54,93 @@ export function AlertImageForm() {
   const [renderResult, setRenderResult] = useState<RenderResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
+  const [destinationOptions, setDestinationOptions] = useState<DestinationOption[]>([]);
+  const [destinationsError, setDestinationsError] = useState<string | null>(null);
+  const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
 
   const payloadJson = useMemo(() => JSON.stringify(payload, null, 2), [payload]);
+  const selectedDestinationValue = useMemo(() => {
+    return destinationOptions.some((option) => option.path === payload.destinationImage)
+      ? payload.destinationImage
+      : manualDestinationValue;
+  }, [destinationOptions, payload.destinationImage]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadDestinations() {
+      try {
+        setIsLoadingDestinations(true);
+        setDestinationsError(null);
+
+        const response = await fetch('/api/destinations');
+        const body = (await response.json()) as DestinationsResponse & { error?: string };
+
+        if (!response.ok) {
+          throw new Error(body.error ?? 'Nao foi possivel carregar os destinos.');
+        }
+
+        if (!isActive) {
+          return;
+        }
+
+        setDestinationOptions(body.items ?? []);
+      } catch (error) {
+        if (!isActive) {
+          return;
+        }
+
+        setDestinationsError(error instanceof Error ? error.message : 'Falha ao carregar destinos.');
+      } finally {
+        if (isActive) {
+          setIsLoadingDestinations(false);
+        }
+      }
+    }
+
+    void loadDestinations();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  function updateDestinationNumberField(field: 'scale' | 'offsetX' | 'offsetY', value: string) {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+      return;
+    }
+
+    setPayload((current) => ({
+      ...current,
+      destinationImageSettings: {
+        ...current.destinationImageSettings,
+        [field]: parsed
+      }
+    }));
+  }
+
+  function handleDestinationFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result !== 'string') {
+        return;
+      }
+
+      setPayload((current) => ({
+        ...current,
+        destinationImage: result
+      }));
+    };
+    reader.readAsDataURL(file);
+    event.target.value = '';
+  }
 
   async function handleRender(): Promise<void> {
     setErrorMessage(null);
@@ -55,7 +157,7 @@ export function AlertImageForm() {
       const body = await response.json();
 
       if (!response.ok) {
-        setErrorMessage(body.error ?? 'Não foi possível renderizar a imagem.');
+        setErrorMessage(body.error ?? 'Nao foi possivel renderizar a imagem.');
         return;
       }
 
@@ -68,198 +170,344 @@ export function AlertImageForm() {
   }
 
   return (
-    <div className="page-shell">
-      <div style={{ display: 'grid', gap: 12, marginBottom: 24 }}>
-        <span className="tag">MVP · Template + Engine de render</span>
-        <div>
-          <h1 style={{ margin: 0, fontSize: '2rem' }}>Flight Alert Image Generator</h1>
-          <p style={{ margin: '10px 0 0', color: 'var(--muted)', maxWidth: 920 }}>
-            Protótipo inicial para geração de imagens 1080x1080 de alertas aéreos. O formulário abaixo alimenta o mesmo componente usado pela engine de renderização via Playwright.
+    <div className="mx-auto w-full max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8">
+      <header className="mb-6 grid gap-3">
+        <span className="inline-flex w-fit items-center rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-blue-700">
+          MVP - Template + Engine de render
+        </span>
+        <div className="grid gap-2">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Flight Alert Image Generator</h1>
+          <p className="max-w-4xl text-sm text-slate-600 sm:text-base">
+            Prototipo inicial para geracao de imagens 1080x1080 de alertas aereos. O formulario abaixo alimenta o mesmo componente usado pela engine de renderizacao via Playwright.
           </p>
         </div>
-      </div>
+      </header>
 
-      <div className="page-grid">
-        <section className="panel">
-          <div className="panel-header">
-            <h2 className="panel-title">Dados do alerta</h2>
-            <p className="panel-subtitle">Estrutura preparada para template simples e composto, com entrada manual e futura evolução para JSON/API.</p>
-          </div>
-          <div className="panel-body">
-            <div className="form-stack">
-              <div className="inline-grid">
-                <Field label="Template">
-                  <select
-                    className="select-input"
-                    value={payload.template}
-                    onChange={(event) => {
-                      const template = event.target.value as TemplateType;
-                      setPayload((current) => applyTemplateToPayload(current, template));
-                    }}
-                  >
-                    <option value="one-way">Somente ida</option>
-                    <option value="round-trip">Ida e volta</option>
-                  </select>
-                </Field>
+      <div className="grid items-start gap-6 xl:grid-cols-[420px_minmax(720px,1fr)]">
+        <Panel
+          title="Dados do alerta"
+          subtitle="Estrutura preparada para template simples e composto, com entrada manual e futura evolucao para JSON/API."
+        >
+          <div className="grid gap-4">
+            <Field label="Template">
+              <select
+                className={inputClassName}
+                value={payload.template}
+                onChange={(event) => {
+                  const template = event.target.value as TemplateType;
+                  setPayload((current) => applyTemplateToPayload(current, template));
+                }}
+              >
+                <option value="one-way">Somente ida</option>
+                <option value="round-trip">Ida e volta</option>
+              </select>
+            </Field>
 
-                <Field label="Cliente / tema">
-                  <select
-                    className="select-input"
-                    value={payload.themeKey}
-                    onChange={(event) => setPayload((current) => ({ ...current, themeKey: event.target.value }))}
-                  >
-                    {brandThemes.map((theme) => (
-                      <option key={theme.key} value={theme.key}>
-                        {theme.name}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-              </div>
+            <Field label="Cliente / tema">
+              <select
+                className={inputClassName}
+                value={payload.themeKey}
+                onChange={(event) => setPayload((current) => ({ ...current, themeKey: event.target.value }))}
+              >
+                {brandThemes.map((theme) => (
+                  <option key={theme.key} value={theme.key}>
+                    {theme.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
 
-              <Field label="Título" hint="Ex.: EXECUTIVA QATAR AIRWAYS">
-                <input
-                  className="text-input"
-                  value={payload.title}
-                  onChange={(event) => setPayload((current) => ({ ...current, title: event.target.value }))}
-                />
-              </Field>
-
-              <Field label="Imagem do destino" hint="Use caminho relativo em /public ou URL absoluta.">
-                <input
-                  className="text-input"
-                  value={payload.destinationImage}
-                  onChange={(event) => setPayload((current) => ({ ...current, destinationImage: event.target.value }))}
-                />
-              </Field>
-
-              <JourneyEditor
-                title="Bloco de ida"
-                block={payload.outbound}
-                onChange={(next) => setPayload((current) => ({ ...current, outbound: next }))}
+            <Field label="Titulo" hint="Ex.: EXECUTIVA QATAR AIRWAYS">
+              <input
+                className={inputClassName}
+                value={payload.title}
+                onChange={(event) => setPayload((current) => ({ ...current, title: event.target.value }))}
               />
+            </Field>
 
-              {payload.template === 'round-trip' && payload.inbound ? (
-                <JourneyEditor
-                  title="Bloco de volta"
-                  block={payload.inbound}
-                  onChange={(next) => setPayload((current) => ({ ...current, inbound: next }))}
-                />
-              ) : null}
+            <Field label="Imagem do destino" hint="Use caminho relativo em /public ou URL absoluta.">
+              <input
+                className={inputClassName}
+                value={payload.destinationImage}
+                onChange={(event) => setPayload((current) => ({ ...current, destinationImage: event.target.value }))}
+              />
+            </Field>
 
-              <div className="section-box">
-                <h3 className="section-title">Rodapé</h3>
-                <Field label="Linha principal">
-                  <input
-                    className="text-input"
-                    value={payload.footer.primaryLine}
-                    onChange={(event) =>
-                      setPayload((current) => ({
-                        ...current,
-                        footer: { ...current.footer, primaryLine: event.target.value }
-                      }))
+            <div className={sectionClassName}>
+              <h3 className="text-base font-semibold text-slate-900">Ajuste da imagem de destino</h3>
+              <Field
+                label="Biblioteca de destinos"
+                hint="Lista automatica da pasta public/assets/destinations. Escolha uma opcao ou mantenha manual."
+              >
+                <select
+                  className={inputClassName}
+                  value={selectedDestinationValue}
+                  onChange={(event) => {
+                    const nextValue = event.target.value;
+                    if (nextValue === manualDestinationValue) {
+                      return;
                     }
-                  />
-                </Field>
-                <Field label="Linha secundária">
-                  <input
-                    className="text-input"
-                    value={payload.footer.secondaryLine}
-                    onChange={(event) =>
-                      setPayload((current) => ({
-                        ...current,
-                        footer: { ...current.footer, secondaryLine: event.target.value }
-                      }))
-                    }
-                  />
-                </Field>
-                <Field label="Linha de data">
-                  <input
-                    className="text-input"
-                    value={payload.footer.generatedAtLine}
-                    onChange={(event) =>
-                      setPayload((current) => ({
-                        ...current,
-                        footer: { ...current.footer, generatedAtLine: event.target.value }
-                      }))
-                    }
-                  />
-                </Field>
-              </div>
 
-              <Field label="Payload JSON" hint="Visão do contrato futuro da API.">
-                <textarea className="text-area" readOnly value={payloadJson} />
-              </Field>
-
-              <div className="section-actions">
-                <button type="button" className="button" onClick={handleRender} disabled={isRendering}>
-                  {isRendering ? 'Gerando...' : 'Gerar PNG'}
-                </button>
-                <button
-                  type="button"
-                  className="button secondary"
-                  onClick={() => {
-                    setPayload(clonePayload(samplePayload));
-                    setRenderResult(null);
-                    setErrorMessage(null);
+                    setPayload((current) => ({
+                      ...current,
+                      destinationImage: nextValue
+                    }));
                   }}
                 >
-                  Restaurar exemplo
-                </button>
+                  <option value={manualDestinationValue}>Manual / URL / upload</option>
+                  {destinationOptions.map((option) => (
+                    <option key={option.path} value={option.path}>
+                      {option.fileName}
+                    </option>
+                  ))}
+                </select>
+                {isLoadingDestinations ? (
+                  <div className="text-xs text-slate-500">Carregando destinos...</div>
+                ) : null}
+                {destinationsError ? (
+                  <div className="text-xs text-amber-700">{destinationsError}</div>
+                ) : null}
+              </Field>
+              <Field
+                label="Selecionar arquivo local"
+                hint="Carregue qualquer imagem. Ela sera convertida para data URL e usada no preview/render."
+              >
+                <input className={inputClassName} type="file" accept="image/*" onChange={handleDestinationFileChange} />
+              </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field
+                  label="Modo de encaixe"
+                  hint="Cover preenche o quadro e pode cortar bordas. Contain mostra tudo sem corte."
+                >
+                  <select
+                    className={inputClassName}
+                    value={payload.destinationImageSettings.fit}
+                    onChange={(event) =>
+                      setPayload((current) => ({
+                        ...current,
+                        destinationImageSettings: {
+                          ...current.destinationImageSettings,
+                          fit: event.target.value as 'cover' | 'contain'
+                        }
+                      }))
+                    }
+                  >
+                    <option value="cover">Cover (corta para preencher)</option>
+                    <option value="contain">Contain (sem cortar)</option>
+                  </select>
+                </Field>
+                <Field label="Zoom" hint="1.0 = tamanho base. Valores maiores ampliam.">
+                  <input
+                    className={inputClassName}
+                    type="number"
+                    step="0.05"
+                    min="0.2"
+                    max="4"
+                    value={payload.destinationImageSettings.scale}
+                    onChange={(event) => updateDestinationNumberField('scale', event.target.value)}
+                  />
+                </Field>
               </div>
-
-              {errorMessage ? <div className="error-box">{errorMessage}</div> : null}
-              {renderResult ? (
-                <div className="success-box">
-                  Render concluído. Arquivo salvo em <strong>{renderResult.imagePath}</strong>.
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </section>
-
-        <section className="panel">
-          <div className="panel-header">
-            <h2 className="panel-title">Preview</h2>
-            <p className="panel-subtitle">Pré-visualização alinhada com a composição final da imagem. A exportação usa o mesmo componente renderizado em HTML estático.</p>
-          </div>
-          <div className="panel-body preview-shell">
-            <div className="preview-frame">
-              <div style={{ width: 810, transform: 'scale(0.75)', transformOrigin: 'top center', marginBottom: -260 }}>
-                <AlertImagePreview payload={payload} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Deslocamento X (px)" hint="Positivo move para a direita.">
+                  <input
+                    className={inputClassName}
+                    type="number"
+                    step="1"
+                    value={payload.destinationImageSettings.offsetX}
+                    onChange={(event) => updateDestinationNumberField('offsetX', event.target.value)}
+                  />
+                </Field>
+                <Field label="Deslocamento Y (px)" hint="Positivo move para baixo.">
+                  <input
+                    className={inputClassName}
+                    type="number"
+                    step="1"
+                    value={payload.destinationImageSettings.offsetY}
+                    onChange={(event) => updateDestinationNumberField('offsetY', event.target.value)}
+                  />
+                </Field>
               </div>
             </div>
-            <div className="preview-note">
-              Observação: nesta primeira versão, o preview é fiel ao template e ao posicionamento base, mas ainda não possui heurísticas automáticas de shrink de fonte para casos extremos.
+
+            <JourneyEditor
+              title="Bloco de ida"
+              block={payload.outbound}
+              onChange={(next) => setPayload((current) => ({ ...current, outbound: next }))}
+            />
+
+            {payload.template === 'round-trip' && payload.inbound ? (
+              <JourneyEditor
+                title="Bloco de volta"
+                block={payload.inbound}
+                onChange={(next) => setPayload((current) => ({ ...current, inbound: next }))}
+              />
+            ) : null}
+
+            <div className={sectionClassName}>
+              <h3 className="text-base font-semibold text-slate-900">Rodape</h3>
+              <Field label="Linha principal">
+                <input
+                  className={inputClassName}
+                  value={payload.footer.primaryLine}
+                  onChange={(event) =>
+                    setPayload((current) => ({
+                      ...current,
+                      footer: { ...current.footer, primaryLine: event.target.value }
+                    }))
+                  }
+                />
+              </Field>
+              <Field label="Linha secundaria">
+                <input
+                  className={inputClassName}
+                  value={payload.footer.secondaryLine}
+                  onChange={(event) =>
+                    setPayload((current) => ({
+                      ...current,
+                      footer: { ...current.footer, secondaryLine: event.target.value }
+                    }))
+                  }
+                />
+              </Field>
+              <Field label="Linha de data">
+                <input
+                  className={inputClassName}
+                  value={payload.footer.generatedAtLine}
+                  onChange={(event) =>
+                    setPayload((current) => ({
+                      ...current,
+                      footer: { ...current.footer, generatedAtLine: event.target.value }
+                    }))
+                  }
+                />
+              </Field>
+            </div>
+
+            <Field label="Payload JSON" hint="Visao do contrato futuro da API.">
+              <textarea className={`${textAreaClassName} font-mono text-xs`} readOnly value={payloadJson} />
+            </Field>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-xl bg-blue-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-blue-400"
+                onClick={handleRender}
+                disabled={isRendering}
+              >
+                {isRendering ? 'Gerando...' : 'Gerar PNG'}
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
+                onClick={() => {
+                  setPayload(clonePayload(samplePayload));
+                  setRenderResult(null);
+                  setErrorMessage(null);
+                }}
+              >
+                Restaurar exemplo
+              </button>
+            </div>
+
+            {errorMessage ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700">{errorMessage}</div>
+            ) : null}
+            {renderResult ? (
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700">
+                Render concluido. Arquivo salvo em <strong>{renderResult.imagePath}</strong>.
+              </div>
+            ) : null}
+          </div>
+        </Panel>
+
+        <Panel
+          title="Preview"
+          subtitle="Pre-visualizacao alinhada com a composicao final da imagem. A exportacao usa o mesmo componente renderizado em HTML estatico."
+        >
+          <div className="grid gap-4">
+            <ResponsivePreview payload={payload} />
+            <div className="text-sm text-slate-600">
+              Observacao: o preview escala com a largura da tela, mantendo base interna fixa de 1080x1080 para preservar o posicionamento original.
             </div>
           </div>
-        </section>
+        </Panel>
       </div>
     </div>
   );
 }
 
+function ResponsivePreview({ payload }: { payload: AlertImagePayload }) {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const [hostWidth, setHostWidth] = useState(previewBaseSize);
+
+  useEffect(() => {
+    const element = hostRef.current;
+    if (!element) {
+      return;
+    }
+
+    const updateSize = () => setHostWidth(element.clientWidth);
+    updateSize();
+
+    const observer = new ResizeObserver(() => updateSize());
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scale = Math.min(hostWidth / previewBaseSize, 1);
+  const scaledSize = previewBaseSize * scale;
+
+  return (
+    <div className="w-full overflow-hidden rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4">
+      <div ref={hostRef} className="w-full">
+        <div className="mx-auto" style={{ width: scaledSize, height: scaledSize }}>
+          <div
+            style={{
+              width: previewBaseSize,
+              height: previewBaseSize,
+              transform: `scale(${scale})`,
+              transformOrigin: 'top left'
+            }}
+          >
+            <AlertImagePreview payload={payload} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Panel({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white shadow-[0_12px_32px_rgba(16,24,40,0.06)]">
+      <div className="border-b border-slate-200 px-6 py-5">
+        <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+        <p className="mt-2 text-sm text-slate-600">{subtitle}</p>
+      </div>
+      <div className="p-6">{children}</div>
+    </section>
+  );
+}
+
 function JourneyEditor({ title, block, onChange }: { title: string; block: JourneyBlock; onChange: (next: JourneyBlock) => void }) {
   return (
-    <div className="section-box">
-      <h3 className="section-title">{title}</h3>
+    <div className={sectionClassName}>
+      <h3 className="text-base font-semibold text-slate-900">{title}</h3>
       <Field label="Rota">
-        <input
-          className="text-input"
-          value={block.route}
-          onChange={(event) => onChange({ ...block, route: event.target.value })}
-        />
+        <input className={inputClassName} value={block.route} onChange={(event) => onChange({ ...block, route: event.target.value })} />
       </Field>
       <Field label="Custos" hint="Um por linha. O template adiciona OU automaticamente entre as ofertas.">
         <textarea
-          className="text-area"
+          className={textAreaClassName}
           value={toTextarea(block.costs)}
           onChange={(event) => onChange(updateJourneyBlock(block, 'costs', event.target.value))}
         />
       </Field>
       <Field label="Datas" hint="Um agrupamento por linha. Ex.: MAI: 1(1), 6(1), 17(1)">
         <textarea
-          className="text-area"
+          className={textAreaClassName}
           value={toTextarea(block.dates)}
           onChange={(event) => onChange(updateJourneyBlock(block, 'dates', event.target.value))}
         />
@@ -268,12 +516,12 @@ function JourneyEditor({ title, block, onChange }: { title: string; block: Journ
   );
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
-    <div className="field-group">
-      <label className="field-label">{label}</label>
+    <div className="grid gap-2">
+      <label className="text-sm font-semibold text-slate-800">{label}</label>
       {children}
-      {hint ? <div className="field-hint">{hint}</div> : null}
+      {hint ? <div className="text-xs text-slate-500">{hint}</div> : null}
     </div>
   );
 }

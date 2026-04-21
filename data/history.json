@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "993b8758-d4cf-45cf-b098-147101277fc1",
+    "template": "round-trip",
+    "route": "São Paulo - Doha",
+    "createdAt": "2026-04-21T17:12:09.023Z",
+    "payload": "{\"template\":\"round-trip\",\"title\":\"EXECUTIVA QATAR AIRWAYS\",\"themeKey\":\"executiva-com-milhas\",\"destinationImage\":\"/assets/destinations/placeholder-destination.svg\",\"outbound\":{\"route\":\"São Paulo - Doha\",\"costs\":[{\"id\":\"outbound-cost-1-75gu734m\",\"value\":\"70K Milhas Avios Qatar + R$ 1.108,24\"},{\"id\":\"outbound-cost-2-cd7pvvhj\",\"value\":\"94,5K Milhas Avios Qatar + R$ 1.108,24\"}],\"dates\":[{\"id\":\"outbound-date-1-nyhj06in\",\"value\":\"MAI: 31(1)\"},{\"id\":\"outbound-date-2-g20wjgik\",\"value\":\"JUN: 1(2), 2(2), 4(1), 11(1)\"}]},\"inbound\":{\"route\":\"Doha - São Paulo\",\"costs\":[{\"id\":\"inbound-cost-1-l3rpjkyf\",\"value\":\"70K Milhas Avios Qatar + 870.00 QAR\"},{\"id\":\"inbound-cost-2-k55rqcc8\",\"value\":\"94,5K Milhas Avios Qatar + 870.00 QAR\"}],\"dates\":[{\"id\":\"inbound-date-1-kn06sj9f\",\"value\":\"ABR: 17(1)\"},{\"id\":\"inbound-date-2-0wg0871h\",\"value\":\"MAI: 1(1), 6(1), 17(1)\"},{\"id\":\"inbound-date-3-iwlzggl1\",\"value\":\"JUN: 5(1), 12(1)\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para 1 passageiro. Em parênteses os assentos disponíveis.\",\"generatedAtLine\":\"Pesquisa realizada no dia 05 de Abril.\"}}"
+  }
+]

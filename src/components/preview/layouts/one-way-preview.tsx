@@ -9,10 +9,16 @@ interface OneWayPreviewProps {
 
 export function OneWayPreview({ payload }: OneWayPreviewProps) {
   const theme = getBrandTheme(payload.themeKey);
+  const leftColumnStyle = {
+    ...sharedStyles.leftColumn,
+    left: theme.mainTextOverlay.x,
+    top: theme.mainTextOverlay.oneWayY,
+    width: theme.mainTextOverlay.width
+  };
 
   return (
     <PreviewScaffold payload={payload}>
-      <section style={{ ...sharedStyles.leftColumn, top: 52 }}>
+      <section style={leftColumnStyle}>
         <header>
           <div style={{ ...sharedStyles.title, color: theme.primaryColor, marginBottom: 28 }}>{payload.title}</div>
         </header>

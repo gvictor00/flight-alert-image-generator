@@ -5,6 +5,12 @@ const samplePayloadSeed: AlertImagePayload = {
   title: 'EXECUTIVA QATAR AIRWAYS',
   themeKey: 'executiva-com-milhas',
   destinationImage: '/assets/destinations/placeholder-destination.svg',
+  destinationImageSettings: {
+    fit: 'cover',
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0
+  },
   outbound: {
     route: 'São Paulo - Doha',
     costs: [

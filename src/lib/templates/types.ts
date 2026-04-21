@@ -22,6 +22,32 @@ export interface FooterContent {
   generatedAtLine: string;
 }
 
+export interface DestinationImageSettings {
+  fit: 'cover' | 'contain';
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+}
+
+export interface FooterTextPosition {
+  x: number;
+  y: number;
+  width: number;
+}
+
+export interface FooterOverlayLayout {
+  primaryLine: FooterTextPosition;
+  secondaryLine: FooterTextPosition;
+  generatedAtLine: FooterTextPosition;
+}
+
+export interface MainTextOverlayLayout {
+  x: number;
+  width: number;
+  oneWayY: number;
+  roundTripY: number;
+}
+
 export interface BrandTheme {
   key: string;
   name: string;
@@ -29,7 +55,10 @@ export interface BrandTheme {
   primaryColor: string;
   textColor: string;
   footerColor: string;
-  watermarkText: string;
+  footerTextColor: string;
+  footerOverlayLayout: FooterOverlayLayout;
+  mainTextOverlay: MainTextOverlayLayout;
+  backgroundImage: string;
 }
 
 export interface AlertImagePayload {
@@ -37,6 +66,7 @@ export interface AlertImagePayload {
   title: string;
   themeKey: string;
   destinationImage: string;
+  destinationImageSettings: DestinationImageSettings;
   outbound: JourneyBlock;
   inbound?: JourneyBlock;
   footer: FooterContent;

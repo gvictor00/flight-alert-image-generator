@@ -18,6 +18,7 @@ function cloneJourneyBlock(block: JourneyBlock, prefix: string): JourneyBlock {
 export function clonePayload(payload: AlertImagePayload): AlertImagePayload {
   return {
     ...payload,
+    destinationImageSettings: { ...payload.destinationImageSettings },
     outbound: cloneJourneyBlock(payload.outbound, 'outbound'),
     inbound: payload.inbound ? cloneJourneyBlock(payload.inbound, 'inbound') : undefined,
     footer: { ...payload.footer }

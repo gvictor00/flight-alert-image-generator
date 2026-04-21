@@ -228,7 +228,7 @@ export function AlertImageForm() {
           </div>
           <div className="panel-body preview-shell">
             <div className="preview-frame">
-              <div style={{ width: 810, transform: 'scale(0.75)', transformOrigin: 'top center', marginBottom: -260 }}>
+              <div style={{ width: 1080, transform: 'scale(0.75)', transformOrigin: 'top center', marginBottom: -260 }}>
                 <AlertImagePreview payload={payload} />
               </div>
             </div>

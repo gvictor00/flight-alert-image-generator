@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { getBrandTheme } from '@/lib/templates/themes';
-import type { AlertImagePayload } from '@/lib/templates/types';
+import type { AlertImagePayload, DestinationImageSettings, FooterTextPosition } from '@/lib/templates/types';
 
 interface PreviewScaffoldProps {
   payload: AlertImagePayload;
@@ -9,6 +9,7 @@ interface PreviewScaffoldProps {
 
 export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
   const theme = getBrandTheme(payload.themeKey);
+  const footerLayout = theme.footerOverlayLayout;
 
   return (
     <div style={styles.scaleWrapper}>
@@ -16,39 +17,51 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
         id="alert-preview-canvas"
         style={{
           ...styles.canvas,
-          background: theme.backgroundColor,
           color: theme.textColor
         }}
       >
-        <div style={{ ...styles.watermark, color: `${theme.primaryColor}14` }}>
-          {theme.watermarkText.split('\n').map((line) => (
-            <div key={line}>{line}</div>
-          ))}
-        </div>
+        <img src={theme.backgroundImage} alt="" aria-hidden style={styles.backgroundImage} />
 
         {children}
 
         <section style={styles.rightColumn}>
           <div style={styles.destinationFrame}>
-            <img src={payload.destinationImage} alt="Destino" style={styles.destinationImage} />
+            <img src={payload.destinationImage} alt="Destino" style={getDestinationImageStyle(payload.destinationImageSettings)} />
           </div>
           <div style={styles.planeContainer}>
             <img src="/assets/plane/plane-placeholder.svg" alt="Plane" style={styles.planeImage} />
           </div>
         </section>
 
-        <footer style={{ ...styles.footer, background: theme.footerColor }}>
-          <div style={styles.footerAccent} />
-          <div style={styles.footerTextGroup}>
-            <div style={styles.footerStrong}>{payload.footer.primaryLine}</div>
-            <div style={styles.footerStrong}>{payload.footer.secondaryLine}</div>
-            <div style={styles.footerLight}>{payload.footer.generatedAtLine}</div>
-          </div>
-          <div style={styles.footerBrand}>{theme.name.toUpperCase()}</div>
-        </footer>
+        <div style={{ ...styles.footerStrongLine, ...toFooterLineStyle(footerLayout.primaryLine), color: theme.footerTextColor }}>
+          {payload.footer.primaryLine}
+        </div>
+        <div style={{ ...styles.footerStrongLine, ...toFooterLineStyle(footerLayout.secondaryLine), color: theme.footerTextColor }}>
+          {payload.footer.secondaryLine}
+        </div>
+        <div style={{ ...styles.footerDateLine, ...toFooterLineStyle(footerLayout.generatedAtLine), color: theme.footerTextColor }}>
+          {payload.footer.generatedAtLine}
+        </div>
       </div>
     </div>
   );
+}
+
+function toFooterLineStyle(position: FooterTextPosition): CSSProperties {
+  return {
+    left: position.x,
+    top: position.y,
+    width: position.width
+  };
+}
+
+function getDestinationImageStyle(settings: DestinationImageSettings): CSSProperties {
+  return {
+    ...styles.destinationImage,
+    objectFit: settings.fit,
+    transform: `translate(${settings.offsetX}px, ${settings.offsetY}px) scale(${settings.scale})`,
+    transformOrigin: 'center center'
+  };
 }
 
 export const sharedStyles: Record<string, CSSProperties> = {
@@ -80,7 +93,18 @@ const styles: Record<string, CSSProperties> = {
     width: 1080,
     height: 1080,
     overflow: 'hidden',
-    fontFamily: 'Montserrat, Arial, sans-serif'
+    fontFamily: 'var(--font-montserrat), Montserrat, Arial, sans-serif'
+  },
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: 1080,
+    height: 1080,
+    objectFit: 'cover',
+    userSelect: 'none',
+    pointerEvents: 'none',
+    zIndex: 0
   },
   rightColumn: {
     position: 'absolute',
@@ -116,59 +140,22 @@ const styles: Record<string, CSSProperties> = {
     height: 'auto',
     objectFit: 'contain'
   },
-  watermark: {
+  footerStrongLine: {
     position: 'absolute',
-    left: 403,
-    top: 350,
-    fontSize: 95,
-    lineHeight: 0.94,
-    fontWeight: 800,
-    whiteSpace: 'pre-line',
-    userSelect: 'none',
-    zIndex: 1,
-    letterSpacing: '-0.04em'
-  },
-  footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    minHeight: 112,
-    display: 'grid',
-    gridTemplateColumns: '240px 1fr 220px',
-    alignItems: 'center',
-    padding: '16px 28px 16px 0',
-    color: '#fff',
-    zIndex: 3
-  },
-  footerAccent: {
-    width: 240,
-    height: 22,
-    background: 'repeating-linear-gradient(120deg, #f4d000 0 18px, #101010 18px 36px)',
-    alignSelf: 'start'
-  },
-  footerTextGroup: {
-    paddingLeft: 18,
-    display: 'grid',
-    gap: 2
-  },
-  footerStrong: {
+    zIndex: 3,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
     fontSize: 17,
     lineHeight: 1.25,
     fontWeight: 700
   },
-  footerLight: {
-    marginTop: 6,
+  footerDateLine: {
+    position: 'absolute',
+    zIndex: 3,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
     fontSize: 15,
     lineHeight: 1.2,
     fontWeight: 500
-  },
-  footerBrand: {
-    justifySelf: 'end',
-    textAlign: 'right',
-    fontSize: 20,
-    lineHeight: 1,
-    fontWeight: 800,
-    letterSpacing: '-0.03em'
   }
 };

@@ -9,10 +9,16 @@ interface RoundTripPreviewProps {
 
 export function RoundTripPreview({ payload }: RoundTripPreviewProps) {
   const theme = getBrandTheme(payload.themeKey);
+  const leftColumnStyle = {
+    ...sharedStyles.leftColumn,
+    left: theme.mainTextOverlay.x,
+    top: theme.mainTextOverlay.roundTripY,
+    width: theme.mainTextOverlay.width
+  };
 
   return (
     <PreviewScaffold payload={payload}>
-      <section style={sharedStyles.leftColumn}>
+      <section style={leftColumnStyle}>
         <header>
           <div style={{ ...sharedStyles.title, color: theme.primaryColor }}>{payload.title}</div>
         </header>
