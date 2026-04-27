@@ -16,11 +16,19 @@ function toTextarea(items: Array<{ value: string }>): string {
   return items.map((item) => item.value).join('\n');
 }
 
+/*
 function fromTextarea(content: string, prefix: string) {
   return content
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean)
+    .map((value) => ({ id: createId(prefix), value }));
+}
+*/
+
+function fromTextarea(content: string, prefix: string) {
+  return content
+    .split('\n')
     .map((value) => ({ id: createId(prefix), value }));
 }
 

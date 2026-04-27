@@ -84,7 +84,7 @@ function JourneySection({ block, primaryColor }: { block: JourneyBlock; primaryC
       <div style={styles.costList}>
         {costs.map((item, index) => (
           <div key={`${block.route}-cost-${index}`} style={styles.costRow}>
-            {index > 0 ? <div style={styles.orRow}>OU</div> : null}
+            {index > 0 ? <div style={styles.orRow}>ou</div> : null}
             <div style={styles.costText}>{item}</div>
           </div>
         ))}
