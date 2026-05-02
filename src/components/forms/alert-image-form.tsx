@@ -377,7 +377,23 @@ export function AlertImageForm() {
             <JourneyEditor
               title="Bloco de ida"
               block={payload.outbound}
-              onChange={(next) => setPayload((current) => ({ ...current, outbound: next }))}
+              onChange={(next) =>
+                setPayload((current) => {
+                  if (current.template !== 'round-trip' || !current.inbound) {
+                    return { ...current, outbound: next };
+                  }
+                  const parts = next.route.split(' - ');
+                  const invertedRoute =
+                    parts.length === 2
+                      ? `${parts[1].trim()} - ${parts[0].trim()}`
+                      : next.route;
+                  return {
+                    ...current,
+                    outbound: next,
+                    inbound: { ...current.inbound, route: invertedRoute }
+                  };
+                })
+              }
             />
 
             {payload.template === 'round-trip' && payload.inbound ? (
@@ -385,6 +401,7 @@ export function AlertImageForm() {
                 title="Bloco de volta"
                 block={payload.inbound}
                 onChange={(next) => setPayload((current) => ({ ...current, inbound: next }))}
+                readOnlyRoute
               />
             ) : null}
 
