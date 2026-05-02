@@ -8,6 +8,11 @@ import { applyTemplateToPayload, clonePayload } from '@/lib/templates/template-h
 import { brandThemes } from '@/lib/templates/themes';
 import type { AlertImagePayload, JourneyBlock, TemplateType } from '@/lib/templates/types';
 import { createId } from '@/lib/utils/ids';
+import { CollapsibleSection } from '@/components/common/CollapsibleSection';
+import { Field } from '@/components/common/Field';
+import { JourneyEditor } from '@/components/common/JourneyEditor';
+import { Panel } from '@/components/common/Panel';
+import { ResponsivePreview } from '@/components/preview/ResponsivePreview';
 
 interface RenderResponse {
   fileName: string;
@@ -271,100 +276,102 @@ export function AlertImageForm() {
             </Field>
 
             <div className={sectionClassName}>
-              <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">Ajuste da imagem de destino</h3>
-              <Field
-                label="Biblioteca de destinos"
-                hint="Lista automatica da pasta public/assets/destinations. Escolha uma opcao ou use upload manual."
-              >
-                <select
-                  className={inputClassName}
-                  value={selectedDestinationValue}
-                  onChange={(event) => {
-                    const nextValue = event.target.value;
-                    if (nextValue === manualDestinationValue) {
-                      return;
-                    }
-
-                    setPayload((current) => ({
-                      ...current,
-                      destinationImage: nextValue
-                    }));
-                  }}
-                >
-                  <option value={manualDestinationValue}>Manual / upload</option>
-                  {destinationOptions.map((option) => (
-                    <option key={option.path} value={option.path}>
-                      {option.fileName}
-                    </option>
-                  ))}
-                </select>
-                {isLoadingDestinations ? (
-                  <div className="text-xs text-slate-500">Carregando destinos...</div>
-                ) : null}
-                {destinationsError ? (
-                  <div className="text-xs text-amber-700">{destinationsError}</div>
-                ) : null}
-              </Field>
-              <Field
-                label="Selecionar arquivo local"
-                hint="Carregue qualquer imagem. Ela sera convertida para data URL e usada no preview/render."
-              >
-                <input className={inputClassName} type="file" accept="image/*" onChange={handleDestinationFileChange} />
-              </Field>
-              <div className="grid gap-4 sm:grid-cols-2">
+              
+              <CollapsibleSection title="Ajuste da imagem de destino">
                 <Field
-                  label="Modo de encaixe"
-                  hint="Cover preenche o quadro e pode cortar bordas. Contain mostra tudo sem corte."
+                  label="Biblioteca de destinos"
+                  hint="Lista automatica da pasta public/assets/destinations. Escolha uma opcao ou use upload manual."
                 >
                   <select
                     className={inputClassName}
-                    value={payload.destinationImageSettings.fit}
-                    onChange={(event) =>
+                    value={selectedDestinationValue}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      if (nextValue === manualDestinationValue) {
+                        return;
+                      }
+
                       setPayload((current) => ({
                         ...current,
-                        destinationImageSettings: {
-                          ...current.destinationImageSettings,
-                          fit: event.target.value as 'cover' | 'contain'
-                        }
-                      }))
-                    }
+                        destinationImage: nextValue
+                      }));
+                    }}
                   >
-                    <option value="cover">Cover (corta para preencher)</option>
-                    <option value="contain">Contain (sem cortar)</option>
+                    <option value={manualDestinationValue}>Manual / upload</option>
+                    {destinationOptions.map((option) => (
+                      <option key={option.path} value={option.path}>
+                        {option.fileName}
+                      </option>
+                    ))}
                   </select>
+                  {isLoadingDestinations ? (
+                    <div className="text-xs text-slate-500">Carregando destinos...</div>
+                  ) : null}
+                  {destinationsError ? (
+                    <div className="text-xs text-amber-700">{destinationsError}</div>
+                  ) : null}
                 </Field>
-                <Field label="Zoom" hint="1.0 = tamanho base. Valores maiores ampliam.">
-                  <input
-                    className={inputClassName}
-                    type="number"
-                    step="0.05"
-                    min="0.2"
-                    max="4"
-                    value={payload.destinationImageSettings.scale}
-                    onChange={(event) => updateDestinationNumberField('scale', event.target.value)}
-                  />
+                <Field
+                  label="Selecionar arquivo local"
+                  hint="Carregue qualquer imagem. Ela sera convertida para data URL e usada no preview/render."
+                >
+                  <input className={inputClassName} type="file" accept="image/*" onChange={handleDestinationFileChange} />
                 </Field>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Deslocamento X (px)" hint="Positivo move para a direita.">
-                  <input
-                    className={inputClassName}
-                    type="number"
-                    step="1"
-                    value={payload.destinationImageSettings.offsetX}
-                    onChange={(event) => updateDestinationNumberField('offsetX', event.target.value)}
-                  />
-                </Field>
-                <Field label="Deslocamento Y (px)" hint="Positivo move para baixo.">
-                  <input
-                    className={inputClassName}
-                    type="number"
-                    step="1"
-                    value={payload.destinationImageSettings.offsetY}
-                    onChange={(event) => updateDestinationNumberField('offsetY', event.target.value)}
-                  />
-                </Field>
-              </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field
+                    label="Modo de encaixe"
+                    hint="Cover preenche o quadro e pode cortar bordas. Contain mostra tudo sem corte."
+                  >
+                    <select
+                      className={inputClassName}
+                      value={payload.destinationImageSettings.fit}
+                      onChange={(event) =>
+                        setPayload((current) => ({
+                          ...current,
+                          destinationImageSettings: {
+                            ...current.destinationImageSettings,
+                            fit: event.target.value as 'cover' | 'contain'
+                          }
+                        }))
+                      }
+                    >
+                      <option value="cover">Cover (corta para preencher)</option>
+                      <option value="contain">Contain (sem cortar)</option>
+                    </select>
+                  </Field>
+                  <Field label="Zoom" hint="1.0 = tamanho base. Valores maiores ampliam.">
+                    <input
+                      className={inputClassName}
+                      type="number"
+                      step="0.05"
+                      min="0.2"
+                      max="4"
+                      value={payload.destinationImageSettings.scale}
+                      onChange={(event) => updateDestinationNumberField('scale', event.target.value)}
+                    />
+                  </Field>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Deslocamento X (px)" hint="Positivo move para a direita.">
+                    <input
+                      className={inputClassName}
+                      type="number"
+                      step="1"
+                      value={payload.destinationImageSettings.offsetX}
+                      onChange={(event) => updateDestinationNumberField('offsetX', event.target.value)}
+                    />
+                  </Field>
+                  <Field label="Deslocamento Y (px)" hint="Positivo move para baixo.">
+                    <input
+                      className={inputClassName}
+                      type="number"
+                      step="1"
+                      value={payload.destinationImageSettings.offsetY}
+                      onChange={(event) => updateDestinationNumberField('offsetY', event.target.value)}
+                    />
+                  </Field>
+                </div>
+              </CollapsibleSection>
             </div>
 
             <JourneyEditor
@@ -423,9 +430,17 @@ export function AlertImageForm() {
               </Field>
             </div>
 
-            <Field label="Payload JSON" hint="Visao do contrato futuro da API.">
-              <textarea className={`${textAreaClassName} font-mono text-xs`} readOnly value={payloadJson} />
-            </Field>
+            <CollapsibleSection title="Dados brutos do payload">
+              <div className="text-sm text-slate-600">
+                Visualizacao do JSON final que alimenta o componente de renderizacao. Ideal para debug e evolucao futura para edicao direta ou alimentacao via API externa.
+              </div>
+              
+              <Field label="Payload JSON" hint="Visao do contrato futuro da API.">
+                <textarea className={`${textAreaClassName} font-mono text-xs`} readOnly value={payloadJson} />
+              </Field>
+            </CollapsibleSection>
+
+
 
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <button
@@ -473,95 +488,6 @@ export function AlertImageForm() {
           </div>
         </Panel>
       </div>
-    </div>
-  );
-}
-
-function ResponsivePreview({ payload }: { payload: AlertImagePayload }) {
-  const hostRef = useRef<HTMLDivElement | null>(null);
-  const [hostWidth, setHostWidth] = useState(previewBaseSize);
-
-  useEffect(() => {
-    const element = hostRef.current;
-    if (!element) {
-      return;
-    }
-
-    const updateSize = () => setHostWidth(element.clientWidth);
-    updateSize();
-
-    const observer = new ResizeObserver(() => updateSize());
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, []);
-
-  const scale = Math.min(hostWidth / previewBaseSize, 1);
-  const scaledSize = previewBaseSize * scale;
-
-  return (
-    <div className="w-full overflow-hidden rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4">
-      <div ref={hostRef} className="w-full">
-        <div className="mx-auto" style={{ width: scaledSize, height: scaledSize }}>
-          <div
-            style={{
-              width: previewBaseSize,
-              height: previewBaseSize,
-              transform: `scale(${scale})`,
-              transformOrigin: 'top left'
-            }}
-          >
-            <AlertImagePreview payload={payload} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Panel({ title, subtitle, className, children }: { title: string; subtitle: string; className?: string; children: ReactNode }) {
-  return (
-    <section className={`rounded-3xl border border-zinc-200/60 bg-white/70 backdrop-blur-md shadow-sm ${className ?? ''}`}>
-      <div className="border-b border-zinc-100 px-6 py-6 lg:px-8">
-        <h2 className="text-xl font-bold tracking-tight text-zinc-900">{title}</h2>
-        <p className="mt-2 text-sm text-zinc-500 leading-relaxed">{subtitle}</p>
-      </div>
-      <div className="p-6 lg:p-8">{children}</div>
-    </section>
-  );
-}
-
-function JourneyEditor({ title, block, onChange }: { title: string; block: JourneyBlock; onChange: (next: JourneyBlock) => void }) {
-  return (
-    <div className={sectionClassName}>
-      <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">{title}</h3>
-      <Field label="Rota">
-        <input className={inputClassName} value={block.route} onChange={(event) => onChange({ ...block, route: event.target.value })} />
-      </Field>
-      <Field label="Custos" hint="Um por linha. O template adiciona OU automaticamente entre as ofertas.">
-        <textarea
-          className={textAreaClassName}
-          value={toTextarea(block.costs)}
-          onChange={(event) => onChange(updateJourneyBlock(block, 'costs', event.target.value))}
-        />
-      </Field>
-      <Field label="Datas" hint="Um agrupamento por linha. Ex.: MAI: 1(1), 6(1), 17(1)">
-        <textarea
-          className={textAreaClassName}
-          value={toTextarea(block.dates)}
-          onChange={(event) => onChange(updateJourneyBlock(block, 'dates', event.target.value))}
-        />
-      </Field>
-    </div>
-  );
-}
-
-function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
-  return (
-    <div className="grid gap-2.5">
-      <label className="text-sm font-semibold text-zinc-900">{label}</label>
-      {children}
-      {hint ? <div className="text-xs text-zinc-500 leading-normal">{hint}</div> : null}
     </div>
   );
 }
