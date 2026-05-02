@@ -1,6 +1,6 @@
 import path from 'path';
 import { promises as fs } from 'fs';
-import { normalizeListText } from '@/lib/rendering/formatters';
+import { normalizeListText } from '@/lib/utils/normalizeListText';
 import { getBrandTheme, getFontWeightForVariant } from '@/lib/templates/themes';
 import type { AlertImagePayload, JourneyBlock } from '@/lib/templates/types';
 

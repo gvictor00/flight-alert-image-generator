@@ -1,5 +1,18 @@
+# Node.js dependencies
 node_modules
+
+# Next.js build output
 .next
+
+# Output data
 output/*.png
 output/*.jpeg
 output/*.jpg
+
+# Claude Code elements
+*.instructions.md
+*.prompt.md
+*.agent.md
+*.skill.md
+.claude
+CLAUDE.md

@@ -1,5 +1,12 @@
 [
   {
+    "id": "2d2c6a2a-32e3-458c-86af-277b197e1c09",
+    "template": "round-trip",
+    "route": "São Paulo - Recife",
+    "createdAt": "2026-04-26T13:20:16.824Z",
+    "payload": "{\"template\":\"round-trip\",\"title\":\"EXECUTIVA LATAM\",\"themeKey\":\"first-class-consultoria\",\"destinationImage\":\"/assets/destinations/HND.jpg\",\"destinationImageSettings\":{\"fit\":\"cover\",\"scale\":1,\"offsetX\":0,\"offsetY\":0},\"outbound\":{\"route\":\"São Paulo - Recife\",\"costs\":[{\"id\":\"costs-h4cormna\",\"value\":\"70K Milhas Avios Qatar + R$ 1.108,24\"},{\"id\":\"costs-i85wl3yy\",\"value\":\"80K Milhas LATAM + \"},{\"id\":\"costs-5g9d948a\",\"value\":\"94,5K Milhas Avios Qatar + R$ 1.108,24\"}],\"dates\":[{\"id\":\"dates-4racb2r9\",\"value\":\"MAI: 31\"},{\"id\":\"dates-2n1nz2ze\",\"value\":\"JUN: 1(2), 2(2), 4(1), 11(1)\"}]},\"inbound\":{\"route\":\"Doha - São Paulo\",\"costs\":[{\"id\":\"inbound-cost-1-0n7tm24a\",\"value\":\"70K Milhas Avios Qatar + 870.00 QAR\"},{\"id\":\"inbound-cost-2-ynycitbn\",\"value\":\"94,5K Milhas Avios Qatar + 870.00 QAR\"}],\"dates\":[{\"id\":\"inbound-date-1-lvnwmtmq\",\"value\":\"ABR: 17(1)\"},{\"id\":\"inbound-date-2-gtxmp2jx\",\"value\":\"MAI: 1(1), 6(1), 17(1)\"},{\"id\":\"inbound-date-3-1bn8eqpi\",\"value\":\"JUN: 5(1), 12(1)\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para  passageiro. Em parênteses os assentos disponíveis.\",\"generatedAtLine\":\"Pesquisa realizada no dia 05 de Abril.\"}}"
+  },
+  {
     "id": "abadaaef-9295-4265-ad37-42bf576fba4a",
     "template": "round-trip",
     "route": "São Paulo - Doha",

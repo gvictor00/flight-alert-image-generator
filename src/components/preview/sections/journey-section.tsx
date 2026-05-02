@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { JourneyBlock } from '@/lib/templates/types';
-import { normalizeListText } from '@/lib/rendering/formatters';
+import { normalizeListText } from '@/lib/utils/normalizeListText';
 
 interface JourneySectionProps {
   block: JourneyBlock;
