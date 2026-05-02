@@ -42,6 +42,9 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           <div style={styles.destinationFrame}>
             <img src={payload.destinationImage} alt="Destino" style={getDestinationImageStyle(payload.destinationImageSettings)} />
           </div>
+          <div style={styles.planeContainer}  className="plane-container pointer-events-none">
+            <img src="/assets/plane/airplane.png" alt="" aria-hidden style={styles.planeImage} />
+          </div>
         </section>
 
         <div
@@ -172,13 +175,14 @@ const styles: Record<string, CSSProperties> = {
   },
   planeContainer: {
     position: 'absolute',
-    left: 2,
-    top: 198,
+    left: 5,
+    top: 175,
     width: 270,
     height: 150,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 3
   },
   planeImage: {
     width: 250,

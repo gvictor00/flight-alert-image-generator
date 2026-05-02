@@ -440,8 +440,6 @@ export function AlertImageForm() {
               </Field>
             </CollapsibleSection>
 
-
-
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <button
                 type="button"
