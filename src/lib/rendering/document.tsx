@@ -63,7 +63,7 @@ function renderJourneyBlock(block: JourneyBlock, options: { primaryColor: string
 
   return `
     <section class="journey ${dense ? 'journey--dense' : 'journey--regular'}">
-      <div class="journey__route autofit" data-fit-text data-fit-text-lines="2" data-fit-text-min="${dense ? '24' : '36'}" style="color:${options.primaryColor}">${escapeHtml(block.route)}</div>
+      <div class="journey__route autofit" data-fit-text data-fit-text-lines="2" data-fit-text-min="${dense ? '24' : '36'}" data-fit-text-base="${dense ? '36' : '54'}" style="color:${options.primaryColor}">${escapeHtml(block.route)}</div>
       ${block.stopsText ? `<div class="journey__stops" style="color:${options.primaryColor}">${escapeHtml(block.stopsText)}</div>` : ''}
       <div class="journey__cost-list">
         ${costs
@@ -396,7 +396,7 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
 
       <section class="${leftColumnClass}" data-scale-to-fit="920">
         <header>
-          <div class="title ${payload.template === 'one-way' ? 'title--one-way' : ''} autofit" data-fit-text data-fit-text-lines="2" data-fit-text-min="20">${escapeHtml(payload.title)}</div>
+          <div class="title ${payload.template === 'one-way' ? 'title--one-way' : ''} autofit" data-fit-text data-fit-text-lines="2" data-fit-text-min="20" data-fit-text-base="31">${escapeHtml(payload.title)}</div>
         </header>
         ${renderJourneyBlock(payload.outbound, { primaryColor: theme.primaryColor, dense: outboundDense })}
         ${inbound}

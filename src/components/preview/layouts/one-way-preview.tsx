@@ -25,6 +25,7 @@ export function OneWayPreview({ payload }: OneWayPreviewProps) {
             data-fit-text
             data-fit-text-lines="2"
             data-fit-text-min="20"
+            data-fit-text-base="31"
             style={{ ...sharedStyles.title, color: theme.primaryColor, marginBottom: 28, fontWeight: getFontWeightForVariant(fontWeights.title) }}
           >
             {payload.title}

@@ -30,6 +30,7 @@ export function JourneySection({
         data-fit-text
         data-fit-text-lines="2"
         data-fit-text-min={dense ? "24" : "36"}
+        data-fit-text-base={dense ? "36" : "54"}
         style={{ ...styles.route, ...getRouteStyles(dense), color: primaryColor, fontWeight: routeFontWeight, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
       >
         {block.route}

@@ -3,8 +3,13 @@ export function applyFitText(container: HTMLElement | Document) {
   const fitElements = container.querySelectorAll<HTMLElement>('[data-fit-text]');
   
   fitElements.forEach((el) => {
-    // Reset para re-calcular
-    el.style.fontSize = '';
+    const baseSizeAttr = el.getAttribute('data-fit-text-base');
+    if (baseSizeAttr) {
+      el.style.fontSize = baseSizeAttr + 'px';
+    } else {
+      // Reset para re-calcular
+      el.style.fontSize = '';
+    }
     
     const minFontSize = parseInt(el.getAttribute('data-fit-text-min') || '12', 10);
     const maxLines = parseInt(el.getAttribute('data-fit-text-lines') || '1', 10);
@@ -48,7 +53,12 @@ function applyFitText(container) {
   if (!container) return;
   const elements = container.querySelectorAll('[data-fit-text]');
   elements.forEach((el) => {
-    el.style.fontSize = '';
+    const baseSizeAttr = el.getAttribute('data-fit-text-base');
+    if (baseSizeAttr) {
+      el.style.fontSize = baseSizeAttr + 'px';
+    } else {
+      el.style.fontSize = '';
+    }
     
     const minFontSize = parseInt(el.getAttribute('data-fit-text-min') || '12', 10);
     const maxLines = parseInt(el.getAttribute('data-fit-text-lines') || '1', 10);

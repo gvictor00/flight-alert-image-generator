@@ -52,6 +52,7 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
             data-fit-text
             data-fit-text-lines="1"
             data-fit-text-min="10"
+            data-fit-text-base="16"
             style={{
               position: 'absolute',
               zIndex: 3,
@@ -74,6 +75,7 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           data-fit-text
           data-fit-text-lines="1"
           data-fit-text-min="10"
+          data-fit-text-base="17"
           style={{
             ...styles.footerStrongLine,
             ...toFooterLineStyle(footerLayout.primaryLine),
@@ -87,6 +89,7 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           data-fit-text
           data-fit-text-lines="1"
           data-fit-text-min="10"
+          data-fit-text-base="17"
           style={{
             ...styles.footerStrongLine,
             ...toFooterLineStyle(footerLayout.secondaryLine),
@@ -100,6 +103,7 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           data-fit-text
           data-fit-text-lines="1"
           data-fit-text-min="9"
+          data-fit-text-base="15"
           style={{
             ...styles.footerDateLine,
             ...toFooterLineStyle(footerLayout.generatedAtLine),
