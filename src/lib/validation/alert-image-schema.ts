@@ -7,6 +7,7 @@ const listItemSchema = z.object({
 
 const journeyBlockSchema = z.object({
   route: z.string().min(1, 'A rota e obrigatoria.'),
+  stopsText: z.string().optional(),
   costs: z.array(listItemSchema).min(1, 'Informe ao menos um custo.'),
   dates: z.array(listItemSchema).min(1, 'Informe ao menos um bloco de datas.')
 });
@@ -29,7 +30,8 @@ export const alertImageSchema = z
       primaryLine: z.string().min(1),
       secondaryLine: z.string().min(1),
       generatedAtLine: z.string().min(1)
-    })
+    }),
+    extraObservation: z.string().optional()
   })
   .superRefine((value, ctx) => {
     if (value.template === 'round-trip' && !value.inbound) {

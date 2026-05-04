@@ -106,10 +106,15 @@ export function AlertImageForm() {
         setDestinationsError(null);
 
         const response = await fetch('/api/destinations');
-        const body = (await response.json()) as DestinationsResponse & { error?: string };
+        let body: DestinationsResponse & { error?: string };
+        try {
+          body = await response.json();
+        } catch (e) {
+          throw new Error('Servidor retornou um formato invalido ao carregar destinos.');
+        }
 
         if (!response.ok) {
-          throw new Error(body.error ?? 'Nao foi possivel carregar os destinos.');
+          throw new Error(body?.error ?? 'Nao foi possivel carregar os destinos.');
         }
 
         if (!isActive) {
@@ -165,10 +170,41 @@ export function AlertImageForm() {
         return;
       }
 
-      setPayload((current) => ({
-        ...current,
-        destinationImage: result
-      }));
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 1080;
+
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const resized = canvas.toDataURL('image/jpeg', 0.85);
+          setPayload((current) => ({
+            ...current,
+            destinationImage: resized
+          }));
+        } else {
+          setPayload((current) => ({
+            ...current,
+            destinationImage: result
+          }));
+        }
+      };
+      img.src = result;
     };
     reader.readAsDataURL(file);
     event.target.value = '';
@@ -404,6 +440,39 @@ export function AlertImageForm() {
                 readOnlyRoute
               />
             ) : null}
+
+            <div className={sectionClassName}>
+              <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">Observação Extra</h3>
+              <div className="flex flex-col gap-3">
+                <label className="flex items-center gap-2 text-sm text-zinc-700">
+                  <input
+                    type="checkbox"
+                    className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+                    checked={payload.extraObservation !== undefined}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setPayload({ ...payload, extraObservation: 'Ex.: Válido apenas para assinantes Clube LATAM' });
+                      } else {
+                        const next = { ...payload };
+                        delete next.extraObservation;
+                        setPayload(next);
+                      }
+                    }}
+                  />
+                  Adicionar observação extra (acima do rodapé)
+                </label>
+                {payload.extraObservation !== undefined && (
+                  <Field label="Texto da observação extra">
+                    <input
+                      className={inputClassName}
+                      value={payload.extraObservation}
+                      onChange={(e) => setPayload({ ...payload, extraObservation: e.target.value })}
+                      placeholder="Ex.: Válido apenas para assinantes Clube LATAM"
+                    />
+                  </Field>
+                )}
+              </div>
+            </div>
 
             <div className={sectionClassName}>
               <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">Rodape</h3>

@@ -47,6 +47,29 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           </div>
         </section>
 
+        {payload.extraObservation && (
+          <div
+            data-fit-text
+            data-fit-text-lines="1"
+            data-fit-text-min="10"
+            style={{
+              position: 'absolute',
+              zIndex: 3,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              fontSize: 16,
+              lineHeight: 1.25,
+              left: 25,
+              top: 935,
+              width: 1030,
+              color: theme.primaryColor,
+              fontWeight: getFontWeightForVariant(footerFontWeights.footerPrimary)
+            }}
+          >
+            {payload.extraObservation}
+          </div>
+        )}
+
         <div
           data-fit-text
           data-fit-text-lines="1"

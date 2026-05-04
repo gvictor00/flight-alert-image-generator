@@ -74,6 +74,36 @@ export function JourneyEditor({ title, block, onChange, readOnlyRoute = false }:
         </Field>
       </div>
 
+      <div className="flex flex-col gap-3">
+        <label className="flex items-center gap-2 text-sm text-zinc-700">
+          <input
+            type="checkbox"
+            className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+            checked={block.stopsText !== undefined}
+            onChange={(e) => {
+              if (e.target.checked) {
+                onChange({ ...block, stopsText: '1 parada no Panamá' });
+              } else {
+                const newBlock = { ...block };
+                delete newBlock.stopsText;
+                onChange(newBlock);
+              }
+            }}
+          />
+          Adicionar informação de paradas (Ex.: 1 parada no Panamá)
+        </label>
+        
+        {block.stopsText !== undefined && (
+          <input
+            type="text"
+            className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 transition-all focus:border-zinc-900 focus:outline-none focus:ring-4 focus:ring-zinc-900/10"
+            value={block.stopsText}
+            onChange={(e) => onChange({ ...block, stopsText: e.target.value })}
+            placeholder="Ex.: 1 parada no Panamá"
+          />
+        )}
+      </div>
+
       {readOnlyRoute && (
         <p className="text-xs text-zinc-400">
           Rota de volta preenchida automaticamente a partir da rota de ida.

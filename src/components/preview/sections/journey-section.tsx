@@ -35,6 +35,12 @@ export function JourneySection({
         {block.route}
       </div>
 
+      {block.stopsText ? (
+        <div style={{ ...styles.stopsText, ...getStopsStyles(dense), fontWeight: orLabelFontWeight, color: primaryColor }}>
+          {block.stopsText}
+        </div>
+      ) : null}
+
       <div style={{ ...styles.costList, gap: dense ? 6 : 8, marginBottom: dense ? 18 : 22 }}>
         {costs.map((item, index) => (
           <div key={`${block.route}-cost-${index}`} style={{ ...styles.costRow, gap: dense ? 6 : 8 }}>
@@ -73,6 +79,24 @@ function getRouteStyles(dense: boolean): CSSProperties {
       };
 }
 
+function getStopsStyles(dense: boolean): CSSProperties {
+  return dense
+    ? {
+        fontSize: 16,
+        marginBottom: 12,
+        maxWidth: 650,
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em'
+      }
+    : {
+        fontSize: 20,
+        marginBottom: 16,
+        maxWidth: 660,
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em'
+      };
+}
+
 function getCostStyles(dense: boolean): CSSProperties {
   return dense
     ? {
@@ -106,6 +130,10 @@ const styles: Record<string, CSSProperties> = {
   route: {
     letterSpacing: '-0.04em',
     lineHeight: 1.05,
+    wordBreak: 'break-word'
+  },
+  stopsText: {
+    lineHeight: 1.1,
     wordBreak: 'break-word'
   },
   costList: {

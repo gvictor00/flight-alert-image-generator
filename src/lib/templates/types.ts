@@ -12,6 +12,7 @@ export interface MonthAvailability {
 
 export interface JourneyBlock {
   route: string;
+  stopsText?: string;
   costs: CostOption[];
   dates: MonthAvailability[];
 }
@@ -93,4 +94,5 @@ export interface AlertImagePayload {
   outbound: JourneyBlock;
   inbound?: JourneyBlock;
   footer: FooterContent;
+  extraObservation?: string;
 }

@@ -64,6 +64,7 @@ function renderJourneyBlock(block: JourneyBlock, options: { primaryColor: string
   return `
     <section class="journey ${dense ? 'journey--dense' : 'journey--regular'}">
       <div class="journey__route autofit" data-fit-text data-fit-text-lines="2" data-fit-text-min="${dense ? '24' : '36'}" style="color:${options.primaryColor}">${escapeHtml(block.route)}</div>
+      ${block.stopsText ? `<div class="journey__stops" style="color:${options.primaryColor}">${escapeHtml(block.stopsText)}</div>` : ''}
       <div class="journey__cost-list">
         ${costs
           .map(
@@ -273,6 +274,19 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
         margin-bottom: 12px;
         font-size: 36px;
       }
+      .journey__stops {
+        font-size: 20px;
+        margin-bottom: 16px;
+        max-width: 660px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: var(--font-weight-or);
+      }
+      .journey--dense .journey__stops {
+        font-size: 16px;
+        margin-bottom: 12px;
+        max-width: 650px;
+      }
       .journey__cost-list {
         display: grid;
         gap: 8px;
@@ -393,6 +407,13 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
           <img class="destination-image" src="${escapeHtml(destinationImageUrl)}" alt="Destino" style="${escapeHtml(destinationImageStyle)}" />
         </div>
       </section>
+      ${payload.extraObservation ? `
+      <div
+        class="footer-line footer-line--primary"
+        data-fit-text data-fit-text-lines="1" data-fit-text-min="10"
+        style="left: 25px; top: 935px; width: 1030px; color: ${escapeHtml(theme.primaryColor)};"
+      >${escapeHtml(payload.extraObservation)}</div>
+      ` : ''}
       <div
         class="footer-line footer-line--primary"
         data-fit-text data-fit-text-lines="1" data-fit-text-min="10"
