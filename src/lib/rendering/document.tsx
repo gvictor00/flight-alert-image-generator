@@ -96,6 +96,7 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
   const themeBackgroundImageUrl = await resolveAssetUrl(theme.backgroundImage, options.publicDir);
   const destinationImageUrl = await resolveAssetUrl(payload.destinationImage, options.publicDir);
   const destinationImageStyle = `object-fit: ${payload.destinationImageSettings.fit}; transform: translate(${payload.destinationImageSettings.offsetX}px, ${payload.destinationImageSettings.offsetY}px) scale(${payload.destinationImageSettings.scale}); transform-origin: center center;`;
+  const planeImageUrl = await resolveAssetUrl('/assets/plane/airplane.png', options.publicDir);
   const textFontVariants = theme.textFontVariants;
 
   const montserratThinUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Thin.ttf', options.publicDir);
@@ -404,6 +405,9 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
       <section class="right-column">
         <div class="destination-frame">
           <img class="destination-image" src="${escapeHtml(destinationImageUrl)}" alt="Destino" style="${escapeHtml(destinationImageStyle)}" />
+        </div>
+        <div class="plane-container pointer-events-none">
+          <img class="plane-image" src="${escapeHtml(planeImageUrl)}" alt="" aria-hidden="true" />
         </div>
       </section>
       ${payload.extraObservation ? `
