@@ -96,7 +96,6 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
   const themeBackgroundImageUrl = await resolveAssetUrl(theme.backgroundImage, options.publicDir);
   const destinationImageUrl = await resolveAssetUrl(payload.destinationImage, options.publicDir);
   const destinationImageStyle = `object-fit: ${payload.destinationImageSettings.fit}; transform: translate(${payload.destinationImageSettings.offsetX}px, ${payload.destinationImageSettings.offsetY}px) scale(${payload.destinationImageSettings.scale}); transform-origin: center center;`;
-  const planeImageUrl = await resolveAssetUrl('/assets/plane/plane-placeholder.svg', options.publicDir);
   const textFontVariants = theme.textFontVariants;
 
   const montserratThinUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Thin.ttf', options.publicDir);

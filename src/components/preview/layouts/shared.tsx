@@ -42,9 +42,6 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
           <div style={styles.destinationFrame}>
             <img src={payload.destinationImage} alt="Destino" style={getDestinationImageStyle(payload.destinationImageSettings)} />
           </div>
-          <div style={styles.planeContainer}  className="plane-container pointer-events-none">
-            <img src="/assets/plane/airplane.png" alt="" aria-hidden style={styles.planeImage} />
-          </div>
         </section>
 
         {payload.extraObservation && (
