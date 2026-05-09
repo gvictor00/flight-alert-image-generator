@@ -626,9 +626,19 @@ export function AlertImageForm() {
                 type="button"
                 className="inline-flex items-center justify-center rounded-xl bg-zinc-900 px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-zinc-900/10 disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={handleRender}
-                disabled={isRendering}
+                disabled={isRendering || isBulkRendering}
               >
                 {isRendering ? 'Gerando...' : 'Gerar PNG'}
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-zinc-700 shadow-sm border border-zinc-200/80 transition-all hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-900/5 disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={handleBulkRender}
+                disabled={isRendering || isBulkRendering}
+              >
+                {isBulkRendering && bulkProgress
+                  ? `Gerando ${bulkProgress.current} de ${bulkProgress.total}...`
+                  : 'Gerar para todos os temas'}
               </button>
               <button
                 type="button"
@@ -637,6 +647,7 @@ export function AlertImageForm() {
                   setPayload(clonePayload(samplePayload));
                   setRenderResult(null);
                   setErrorMessage(null);
+                  setBulkResult(null);
                 }}
               >
                 Restaurar exemplo
@@ -650,6 +661,19 @@ export function AlertImageForm() {
               <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700">
                 Render concluido. Download iniciado para <strong>{renderResult.fileName}</strong>.
               </div>
+            ) : null}
+            {bulkResult !== null ? (
+              bulkResult.count === 0 ? (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700">
+                  Nenhuma imagem foi gerada. Verifique o console.
+                </div>
+              ) : (
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700">
+                  {bulkResult.errors > 0
+                    ? `ZIP gerado com ${bulkResult.count} ${bulkResult.count === 1 ? 'imagem' : 'imagens'}. ${bulkResult.errors} ${bulkResult.errors === 1 ? 'tema falhou' : 'temas falharam'} (ver console).`
+                    : `ZIP gerado com ${bulkResult.count} ${bulkResult.count === 1 ? 'imagem' : 'imagens'}. Download iniciado.`}
+                </div>
+              )
             ) : null}
           </div>
         </Panel>
