@@ -13,6 +13,7 @@ import { Field } from '@/components/common/Field';
 import { JourneyEditor } from '@/components/common/JourneyEditor';
 import { Panel } from '@/components/common/Panel';
 import { ResponsivePreview } from '@/components/preview/ResponsivePreview';
+import JSZip from 'jszip';
 
 interface RenderResponse {
   fileName: string;
@@ -81,11 +82,27 @@ function updateJourneyBlock(block: JourneyBlock, field: 'costs' | 'dates', value
   };
 }
 
+function sanitizeForFilename(value: string): string {
+  return value
+    .replace(/[^a-zA-Z0-9\-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function buildBatchTimestamp(): string {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}T${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+}
+
 export function AlertImageForm() {
   const [payload, setPayload] = useState<AlertImagePayload>(() => clonePayload(samplePayload));
   const [renderResult, setRenderResult] = useState<RenderResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
+  const [isBulkRendering, setIsBulkRendering] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState<{ current: number; total: number } | null>(null);
+  const [bulkResult, setBulkResult] = useState<{ count: number; errors: number } | null>(null);
   const [destinationOptions, setDestinationOptions] = useState<DestinationOption[]>([]);
   const [destinationsError, setDestinationsError] = useState<string | null>(null);
   const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
@@ -251,6 +268,79 @@ export function AlertImageForm() {
     } finally {
       setIsRendering(false);
     }
+  }
+
+  async function handleBulkRender(): Promise<void> {
+    setErrorMessage(null);
+    setRenderResult(null);
+    setBulkResult(null);
+    setIsBulkRendering(true);
+
+    const total = brandThemes.length;
+    const timestamp = buildBatchTimestamp();
+    const route = sanitizeForFilename(payload.outbound.route);
+    const blobs: Array<{ name: string; blob: Blob }> = [];
+
+    for (let i = 0; i < brandThemes.length; i++) {
+      const theme = brandThemes[i];
+      setBulkProgress({ current: i + 1, total });
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60_000);
+
+      try {
+        const response = await fetch('/api/render', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, themeKey: theme.key }),
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const themeName = sanitizeForFilename(theme.name);
+        blobs.push({ name: `${route}-${timestamp}-${themeName}.png`, blob });
+      } catch (error) {
+        console.error(`Bulk render failed for theme "${theme.name}":`, error);
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }
+
+    setIsBulkRendering(false);
+    setBulkProgress(null);
+
+    const errors = total - blobs.length;
+
+    if (blobs.length === 0) {
+      setBulkResult({ count: 0, errors });
+      return;
+    }
+
+    const zip = new JSZip();
+    for (const { name, blob } of blobs) {
+      zip.file(name, blob);
+    }
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const zipName = `${route}-${timestamp}-bulk.zip`;
+
+    const objectUrl = URL.createObjectURL(zipBlob);
+    try {
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = zipName;
+      document.body.append(link);
+      link.click();
+      link.remove();
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
+
+    setBulkResult({ count: blobs.length, errors });
   }
 
   return (
