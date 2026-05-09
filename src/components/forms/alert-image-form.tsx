@@ -320,27 +320,32 @@ export function AlertImageForm() {
       return;
     }
 
-    const zip = new JSZip();
-    for (const { name, blob } of blobs) {
-      zip.file(name, blob);
-    }
-
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
-    const zipName = `${route}-${timestamp}-bulk.zip`;
-
-    const objectUrl = URL.createObjectURL(zipBlob);
     try {
-      const link = document.createElement('a');
-      link.href = objectUrl;
-      link.download = zipName;
-      document.body.append(link);
-      link.click();
-      link.remove();
-    } finally {
-      URL.revokeObjectURL(objectUrl);
-    }
+      const zip = new JSZip();
+      for (const { name, blob } of blobs) {
+        zip.file(name, blob);
+      }
 
-    setBulkResult({ count: blobs.length, errors });
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const zipName = `${route}-${timestamp}-bulk.zip`;
+
+      const objectUrl = URL.createObjectURL(zipBlob);
+      try {
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = zipName;
+        document.body.append(link);
+        link.click();
+        link.remove();
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+      }
+
+      setBulkResult({ count: blobs.length, errors });
+    } catch (error) {
+      console.error('Failed to assemble ZIP:', error);
+      setBulkResult({ count: 0, errors: total });
+    }
   }
 
   return (
