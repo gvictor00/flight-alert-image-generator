@@ -12,7 +12,7 @@ export function CollapsibleSection({ title, children }: CollapsibleSectionProps)
   return (
     <div className="collapsible-section">
       <button
-        className="text-sm font-bold tracking-wide uppercase text-zinc-900 flex items-center gap-1"
+        className="text-sm font-bold tracking-wide uppercase text-zinc-900 dark:text-zinc-100 flex items-center gap-1"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {title} {isOpen ? <ArrowDownToLine /> : <ArrowRightToLine />}
