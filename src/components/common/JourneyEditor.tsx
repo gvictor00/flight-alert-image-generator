@@ -5,9 +5,10 @@ import { findAirport, resolveToIata } from '@/lib/data/airports';
 import { createId } from '@/lib/utils/ids';
 
 const textAreaClassName =
-  'w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-4 py-3.5 text-sm text-zinc-900 transition-all hover:bg-zinc-50 hover:border-zinc-300 focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-zinc-900/10 placeholder:text-zinc-400 min-h-[120px] resize-y leading-relaxed';
+  'w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-4 py-3.5 text-sm text-zinc-900 transition-all hover:bg-zinc-50 hover:border-zinc-300 focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-zinc-900/10 placeholder:text-zinc-400 min-h-[120px] resize-y leading-relaxed dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:border-zinc-600 dark:focus:border-zinc-400 dark:focus:bg-zinc-800 dark:focus:ring-zinc-100/10 dark:placeholder:text-zinc-500';
+
 const sectionClassName =
-  'grid gap-5 rounded-2xl border border-zinc-200/80 bg-zinc-50/30 p-5 lg:p-6 shadow-sm';
+  'grid gap-5 rounded-2xl border border-zinc-200/80 bg-zinc-50/30 p-5 lg:p-6 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-800/30';
 
 function toTextarea(items: Array<{ value: string }>): string {
   return items.map((item) => item.value).join('\n');
@@ -31,7 +32,6 @@ function parseRoute(route: string): { origin: string; destination: string } {
   };
 }
 
-// Stores city names in block.route so the rendered image shows readable text.
 function composeRoute(originIata: string, destinationIata: string): string {
   const originCity = findAirport(originIata)?.city ?? originIata;
   const destinationCity = findAirport(destinationIata)?.city ?? destinationIata;
@@ -53,7 +53,7 @@ export function JourneyEditor({ title, block, onChange, readOnlyRoute = false }:
 
   return (
     <div className={sectionClassName}>
-      <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">{title}</h3>
+      <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900 dark:text-zinc-100">{title}</h3>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Origem">
@@ -75,10 +75,10 @@ export function JourneyEditor({ title, block, onChange, readOnlyRoute = false }:
       </div>
 
       <div className="flex flex-col gap-3">
-        <label className="flex items-center gap-2 text-sm text-zinc-700">
+        <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
           <input
             type="checkbox"
-            className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+            className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 dark:border-zinc-600 dark:bg-zinc-800 dark:checked:bg-zinc-100"
             checked={block.stopsText !== undefined}
             onChange={(e) => {
               if (e.target.checked) {
@@ -92,11 +92,11 @@ export function JourneyEditor({ title, block, onChange, readOnlyRoute = false }:
           />
           Adicionar informação de paradas (Ex.: 1 parada no Panamá)
         </label>
-        
+
         {block.stopsText !== undefined && (
           <input
             type="text"
-            className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 transition-all focus:border-zinc-900 focus:outline-none focus:ring-4 focus:ring-zinc-900/10"
+            className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 transition-all focus:border-zinc-900 focus:outline-none focus:ring-4 focus:ring-zinc-900/10 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-400 dark:focus:ring-zinc-100/10"
             value={block.stopsText}
             onChange={(e) => onChange({ ...block, stopsText: e.target.value })}
             placeholder="Ex.: 1 parada no Panamá"
@@ -105,7 +105,7 @@ export function JourneyEditor({ title, block, onChange, readOnlyRoute = false }:
       </div>
 
       {readOnlyRoute && (
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-zinc-400 dark:text-zinc-500">
           Rota de volta preenchida automaticamente a partir da rota de ida.
         </p>
       )}
