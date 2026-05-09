@@ -31,7 +31,7 @@ export function ResponsivePreview({ payload }: ResponsivePreviewProps) {
   const scaledSize = previewBaseSize * scale;
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4">
+    <div className="w-full overflow-hidden rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 dark:border-zinc-700 dark:bg-zinc-900">
       <div ref={hostRef} className="w-full">
         <div className="mx-auto" style={{ width: scaledSize, height: scaledSize }}>
           <div
