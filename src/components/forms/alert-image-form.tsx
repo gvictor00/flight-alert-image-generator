@@ -13,6 +13,7 @@ import { Field } from '@/components/common/Field';
 import { JourneyEditor } from '@/components/common/JourneyEditor';
 import { Panel } from '@/components/common/Panel';
 import { ResponsivePreview } from '@/components/preview/ResponsivePreview';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 import JSZip from 'jszip';
 
 interface RenderResponse {
@@ -30,9 +31,9 @@ interface DestinationsResponse {
 }
 
 const inputClassName =
-  'w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-4 py-3.5 text-sm text-zinc-900 transition-all hover:bg-zinc-50 hover:border-zinc-300 focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-zinc-900/10 placeholder:text-zinc-400';
+  'w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-4 py-3.5 text-sm text-zinc-900 transition-all hover:bg-zinc-50 hover:border-zinc-300 focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-zinc-900/10 placeholder:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:border-zinc-600 dark:focus:border-zinc-400 dark:focus:bg-zinc-800 dark:focus:ring-zinc-100/10 dark:placeholder:text-zinc-500';
 const textAreaClassName = `${inputClassName} min-h-[120px] resize-y leading-relaxed`;
-const sectionClassName = 'grid gap-5 rounded-2xl border border-zinc-200/80 bg-zinc-50/30 p-5 lg:p-6 shadow-sm';
+const sectionClassName = 'grid gap-5 rounded-2xl border border-zinc-200/80 bg-zinc-50/30 p-5 lg:p-6 shadow-sm dark:border-zinc-700/80 dark:bg-zinc-800/30';
 const previewBaseSize = 1080;
 const manualDestinationValue = '__manual__';
 
@@ -351,12 +352,15 @@ export function AlertImageForm() {
   return (
     <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8">
       <header className="mb-8 grid gap-4">
-        <span className="inline-flex w-fit items-center rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-bold tracking-widest text-white shadow-sm">
-          MVP - RENDER ENGINE
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="inline-flex w-fit items-center rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-bold tracking-widest text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-900">
+            MVP - RENDER ENGINE
+          </span>
+          <ThemeToggle />
+        </div>
         <div className="grid gap-2">
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl">Flight Alert <span className="text-zinc-400">Generator</span></h1>
-          <p className="max-w-2xl text-base text-zinc-500 sm:text-lg">
+          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">Flight Alert <span className="text-zinc-400 dark:text-zinc-500">Generator</span></h1>
+          <p className="max-w-2xl text-base text-zinc-500 sm:text-lg dark:text-zinc-400">
             Prototipo inicial para geracao de imagens 1080x1080 de alertas aereos. O formulario abaixo alimenta o mesmo componente usado pela engine de renderizacao via Playwright.
           </p>
         </div>
@@ -436,7 +440,7 @@ export function AlertImageForm() {
                     ))}
                   </select>
                   {isLoadingDestinations ? (
-                    <div className="text-xs text-slate-500">Carregando destinos...</div>
+                    <div className="text-xs text-slate-500 dark:text-zinc-400">Carregando destinos...</div>
                   ) : null}
                   {destinationsError ? (
                     <div className="text-xs text-amber-700">{destinationsError}</div>
@@ -537,9 +541,9 @@ export function AlertImageForm() {
             ) : null}
 
             <div className={sectionClassName}>
-              <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">Observação Extra</h3>
+              <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900 dark:text-zinc-100">Observação Extra</h3>
               <div className="flex flex-col gap-3">
-                <label className="flex items-center gap-2 text-sm text-zinc-700">
+                <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
                   <input
                     type="checkbox"
                     className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
@@ -570,7 +574,7 @@ export function AlertImageForm() {
             </div>
 
             <div className={sectionClassName}>
-              <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900">Rodape</h3>
+              <h3 className="text-sm font-bold tracking-wide uppercase text-zinc-900 dark:text-zinc-100">Rodape</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Linha principal">
                   <input
@@ -612,7 +616,7 @@ export function AlertImageForm() {
             </div>
 
             <CollapsibleSection title="Dados brutos do payload">
-              <div className="text-sm text-slate-600">
+              <div className="text-sm text-slate-600 dark:text-zinc-400">
                 Visualizacao do JSON final que alimenta o componente de renderizacao. Ideal para debug e evolucao futura para edicao direta ou alimentacao via API externa.
               </div>
               
@@ -624,7 +628,7 @@ export function AlertImageForm() {
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-xl bg-zinc-900 px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-zinc-900/10 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center rounded-xl bg-zinc-900 px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-zinc-900/10 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-100/10"
                 onClick={handleRender}
                 disabled={isRendering || isBulkRendering}
               >
@@ -632,7 +636,7 @@ export function AlertImageForm() {
               </button>
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-zinc-700 shadow-sm border border-zinc-200/80 transition-all hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-900/5 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-zinc-700 shadow-sm border border-zinc-200/80 transition-all hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-900/5 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700/80 dark:hover:bg-zinc-700 dark:focus:ring-zinc-100/5"
                 onClick={handleBulkRender}
                 disabled={isRendering || isBulkRendering}
               >
@@ -642,7 +646,7 @@ export function AlertImageForm() {
               </button>
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-zinc-700 shadow-sm border border-zinc-200/80 transition-all hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-900/5"
+                className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-zinc-700 shadow-sm border border-zinc-200/80 transition-all hover:bg-zinc-50 focus:outline-none focus:ring-4 focus:ring-zinc-900/5 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700/80 dark:hover:bg-zinc-700 dark:focus:ring-zinc-100/5"
                 onClick={() => {
                   setPayload(clonePayload(samplePayload));
                   setRenderResult(null);
@@ -655,20 +659,20 @@ export function AlertImageForm() {
             </div>
 
             {errorMessage ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700">{errorMessage}</div>
+              <div className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/30 dark:text-red-400">{errorMessage}</div>
             ) : null}
             {renderResult ? (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700">
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
                 Render concluido. Download iniciado para <strong>{renderResult.fileName}</strong>.
               </div>
             ) : null}
             {bulkResult !== null ? (
               bulkResult.count === 0 ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700">
+                <div className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/30 dark:text-red-400">
                   Nenhuma imagem foi gerada. Verifique o console.
                 </div>
               ) : (
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
                   {bulkResult.errors > 0
                     ? `ZIP gerado com ${bulkResult.count} ${bulkResult.count === 1 ? 'imagem' : 'imagens'}. ${bulkResult.errors} ${bulkResult.errors === 1 ? 'tema falhou' : 'temas falharam'} (ver console).`
                     : `ZIP gerado com ${bulkResult.count} ${bulkResult.count === 1 ? 'imagem' : 'imagens'}. Download iniciado.`}
@@ -685,7 +689,7 @@ export function AlertImageForm() {
         >
           <div className="grid gap-4">
             <ResponsivePreview payload={payload} />
-            <div className="text-sm text-slate-600">
+            <div className="text-sm text-slate-600 dark:text-zinc-400">
               Observacao: o preview escala com a largura da tela, mantendo base interna fixa de 1080x1080 para preservar o posicionamento original.
             </div>
           </div>
