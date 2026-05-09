@@ -59,20 +59,9 @@ function toTextarea(items: Array<{ value: string }>): string {
   return items.map((item) => item.value).join('\n');
 }
 
-/*
 function fromTextarea(content: string, prefix: string) {
   return content
     .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((value) => ({ id: createId(prefix), value }));
-}
-*/
-function fromTextarea(content: string, prefix: string) {
-  console.log('fromTextarea content:', content);
-  return content
-    .split('\n')
-    // Removemos o .trim() e .filter(Boolean) para não quebrar a digitação do usuário
     .map((value) => ({ id: createId(prefix), value }));
 }
 
