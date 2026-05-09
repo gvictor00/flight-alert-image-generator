@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { ThemeProvider } from '@/components/common/ThemeProvider';
 
 const montserrat = localFont({
   variable: '--font-montserrat',
@@ -25,8 +26,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${montserrat.variable} min-h-screen font-sans`}>{children}</body>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={`${montserrat.variable} min-h-screen font-sans`}>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }
