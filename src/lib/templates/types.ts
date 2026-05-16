@@ -52,9 +52,12 @@ export interface MainTextOverlayLayout {
 export type FontVariantKey =
   | 'thin'
   | 'extra-light'
+  | 'extra-light-italic'
   | 'light'
+  | 'light-italic'
   | 'regular'
   | 'medium'
+  | 'medium-italic'
   | 'semi-bold'
   | 'bold'
   | 'extra-bold'
@@ -69,6 +72,7 @@ export interface ThemeTextFontVariants {
   footerPrimary: FontVariantKey;
   footerSecondary: FontVariantKey;
   footerDate: FontVariantKey;
+  obsText: FontVariantKey;
 }
 
 export interface BrandTheme {
@@ -77,6 +81,7 @@ export interface BrandTheme {
   backgroundColor: string;
   primaryColor: string;
   textColor: string;
+  obsTextColor: string;
   footerColor: string;
   footerTextColor: string;
   footerOverlayLayout: FooterOverlayLayout;
