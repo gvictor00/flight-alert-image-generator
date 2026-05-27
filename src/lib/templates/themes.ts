@@ -9,10 +9,11 @@ export const brandThemes: BrandTheme[] = [
     textColor: '#3a3a3a',
     footerColor: '#1450b8',
     footerTextColor: '#ffffff',
+    obsTextColor: '#3d3d3d',
     footerOverlayLayout: {
-      primaryLine: { x: 25, y: 987, width: 596 },
-      secondaryLine: { x: 25, y: 1007, width: 596 },
-      generatedAtLine: { x: 25, y: 1050, width: 596 }
+      primaryLine: { x: 25, y: 987, width: 800 },
+      secondaryLine: { x: 25, y: 1007, width: 800 },
+      generatedAtLine: { x: 25, y: 1050, width: 800 }
     },
     mainTextOverlay: {
       x: 36,
@@ -29,7 +30,8 @@ export const brandThemes: BrandTheme[] = [
       orLabel: 'medium',
       footerPrimary: 'bold',
       footerSecondary: 'bold',
-      footerDate: 'medium'
+      footerDate: 'medium',
+      obsText: 'extra-light-italic'
     }
   },
   {
@@ -39,11 +41,12 @@ export const brandThemes: BrandTheme[] = [
     primaryColor: '#f1c469',
     textColor: '#d1d3d9',
     footerColor: '#121e3e',
-    footerTextColor: '#ffffff',
+    footerTextColor: '#121e3e',
+    obsTextColor: '#cccccc',
     footerOverlayLayout: {
-      primaryLine: { x: 25, y: 987, width: 596 },
-      secondaryLine: { x: 25, y: 1007, width: 596 },
-      generatedAtLine: { x: 25, y: 1050, width: 596 }
+      primaryLine: { x: 25, y: 987, width: 800 },
+      secondaryLine: { x: 25, y: 1007, width: 800 },
+      generatedAtLine: { x: 25, y: 1050, width: 800 }
     },
     mainTextOverlay: {
       x: 36,
@@ -60,7 +63,8 @@ export const brandThemes: BrandTheme[] = [
       orLabel: 'medium',
       footerPrimary: 'bold',
       footerSecondary: 'bold',
-      footerDate: 'medium'
+      footerDate: 'medium',
+      obsText: 'light-italic'
     }
   }
 ];
@@ -68,9 +72,12 @@ export const brandThemes: BrandTheme[] = [
 const fontVariantWeightMap: Record<FontVariantKey, number> = {
   thin: 100,
   'extra-light': 200,
+  'extra-light-italic': 200,
   light: 300,
+  'light-italic': 300,
   regular: 400,
   medium: 500,
+  'medium-italic': 500,
   'semi-bold': 600,
   bold: 700,
   'extra-bold': 800,

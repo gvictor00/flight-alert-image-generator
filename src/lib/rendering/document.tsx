@@ -101,9 +101,12 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
 
   const montserratThinUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Thin.ttf', options.publicDir);
   const montserratExtraLightUrl = await resolveAssetUrl('/assets/fonts/Montserrat-ExtraLight.ttf', options.publicDir);
+  const montserratExtraLightItalicUrl = await resolveAssetUrl('/assets/fonts/Montserrat-ExtraLightItalic.ttf', options.publicDir);
+  const montserratLightItalicUrl = await resolveAssetUrl('/assets/fonts/Montserrat-LightItalic.ttf', options.publicDir);
   const montserratLightUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Light.ttf', options.publicDir);
   const montserratRegularUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Regular.ttf', options.publicDir);
   const montserratMediumUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Medium.ttf', options.publicDir);
+  const montserratMediumItalicUrl = await resolveAssetUrl('/assets/fonts/Montserrat-MediumItalic.ttf', options.publicDir);
   const montserratSemiBoldUrl = await resolveAssetUrl('/assets/fonts/Montserrat-SemiBold.ttf', options.publicDir);
   const montserratBoldUrl = await resolveAssetUrl('/assets/fonts/Montserrat-Bold.ttf', options.publicDir);
   const montserratExtraBoldUrl = await resolveAssetUrl('/assets/fonts/Montserrat-ExtraBold.ttf', options.publicDir);
@@ -138,6 +141,13 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
       }
       @font-face {
         font-family: 'MontserratLocal';
+        src: url('${escapeCssUrl(montserratLightItalicUrl)}') format('truetype');
+        font-style: italic;
+        font-weight: 300;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'MontserratLocal';
         src: url('${escapeCssUrl(montserratRegularUrl)}') format('truetype');
         font-style: normal;
         font-weight: 400;
@@ -145,8 +155,8 @@ export async function buildRenderDocument(payload: AlertImagePayload, options: B
       }
       @font-face {
         font-family: 'MontserratLocal';
-        src: url('${escapeCssUrl(montserratMediumUrl)}') format('truetype');
-        font-style: normal;
+        src: url('${escapeCssUrl(montserratMediumItalicUrl)}') format('truetype');
+        font-style: italic;
         font-weight: 500;
         font-display: swap;
       }

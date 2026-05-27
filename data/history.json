@@ -1,5 +1,33 @@
 [
   {
+    "id": "74512c82-c109-4d41-8222-2b0513c47944",
+    "template": "round-trip",
+    "route": "Helsinque - Phuket",
+    "createdAt": "2026-05-16T13:39:14.546Z",
+    "payload": "{\"template\":\"round-trip\",\"title\":\"EXECUTIVA FINNAIR\",\"themeKey\":\"first-class-consultoria\",\"destinationImage\":\"/assets/destinations/HKT.png\",\"destinationImageSettings\":{\"fit\":\"cover\",\"scale\":1,\"offsetX\":0,\"offsetY\":0},\"outbound\":{\"route\":\"Helsinque - Phuket\",\"costs\":[{\"id\":\"costs-coeaz47p\",\"value\":\"75K Milhas AAdvantage + R$ 122,69\"},{\"id\":\"costs-wdn88mpm\",\"value\":\"62,5K Milhas Avios Finnair + 121.07 EUR\"}],\"dates\":[{\"id\":\"dates-r8ndkjw4\",\"value\":\"FEV: 27\"},{\"id\":\"dates-hp3aakds\",\"value\":\"MAR: 19\"}]},\"inbound\":{\"route\":\"Phuket - Helsinque\",\"costs\":[{\"id\":\"costs-u1betslf\",\"value\":\"75K Milhas AAdvantage + R$ 181,69\"},{\"id\":\"costs-002aiqf0\",\"value\":\"62,5K Milhas Avios Finnair + 4,975.00 THB\"}],\"dates\":[{\"id\":\"dates-auz58r3h\",\"value\":\"NOV: 15\"},{\"id\":\"dates-2p38qnvb\",\"value\":\"JAN: 20, 30\"},{\"id\":\"dates-zxkwsggb\",\"value\":\"FEV: 22\"},{\"id\":\"dates-7rqr1sl6\",\"value\":\"MAR: 4, 17, 18\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para 1 passageiro. Em parênteses os assentos disponíveis.\",\"generatedAtLine\":\"Pesquisa realizada no dia 16 de Maio.\"}}"
+  },
+  {
+    "id": "29a11f0a-1cfc-4541-91e9-1e1e6b8d9456",
+    "template": "round-trip",
+    "route": "Helsinque - Phuket",
+    "createdAt": "2026-05-16T13:39:13.207Z",
+    "payload": "{\"template\":\"round-trip\",\"title\":\"EXECUTIVA FINNAIR\",\"themeKey\":\"executiva-com-milhas\",\"destinationImage\":\"/assets/destinations/HKT.png\",\"destinationImageSettings\":{\"fit\":\"cover\",\"scale\":1,\"offsetX\":0,\"offsetY\":0},\"outbound\":{\"route\":\"Helsinque - Phuket\",\"costs\":[{\"id\":\"costs-coeaz47p\",\"value\":\"75K Milhas AAdvantage + R$ 122,69\"},{\"id\":\"costs-wdn88mpm\",\"value\":\"62,5K Milhas Avios Finnair + 121.07 EUR\"}],\"dates\":[{\"id\":\"dates-r8ndkjw4\",\"value\":\"FEV: 27\"},{\"id\":\"dates-hp3aakds\",\"value\":\"MAR: 19\"}]},\"inbound\":{\"route\":\"Phuket - Helsinque\",\"costs\":[{\"id\":\"costs-u1betslf\",\"value\":\"75K Milhas AAdvantage + R$ 181,69\"},{\"id\":\"costs-002aiqf0\",\"value\":\"62,5K Milhas Avios Finnair + 4,975.00 THB\"}],\"dates\":[{\"id\":\"dates-auz58r3h\",\"value\":\"NOV: 15\"},{\"id\":\"dates-2p38qnvb\",\"value\":\"JAN: 20, 30\"},{\"id\":\"dates-zxkwsggb\",\"value\":\"FEV: 22\"},{\"id\":\"dates-7rqr1sl6\",\"value\":\"MAR: 4, 17, 18\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para 1 passageiro. Em parênteses os assentos disponíveis.\",\"generatedAtLine\":\"Pesquisa realizada no dia 16 de Maio.\"}}"
+  },
+  {
+    "id": "c4b4a5f6-a3de-4838-a7ca-b4ffae144b0e",
+    "template": "round-trip",
+    "route": "São Paulo - Doha",
+    "createdAt": "2026-05-09T21:51:17.955Z",
+    "payload": "{\"template\":\"round-trip\",\"title\":\"EXECUTIVA QATAR AIRWAYS\",\"themeKey\":\"first-class-consultoria\",\"destinationImage\":\"/assets/destinations/placeholder-destination.svg\",\"destinationImageSettings\":{\"fit\":\"cover\",\"scale\":1,\"offsetX\":0,\"offsetY\":0},\"outbound\":{\"route\":\"São Paulo - Doha\",\"costs\":[{\"id\":\"outbound-cost-1-3wzyyz2o\",\"value\":\"70K Milhas Avios Qatar + R$ 1.108,24\"},{\"id\":\"outbound-cost-2-jtzmi07r\",\"value\":\"94,5K Milhas Avios Qatar + R$ 1.108,24\"}],\"dates\":[{\"id\":\"outbound-date-1-bc8hereq\",\"value\":\"MAI: 31(1)\"},{\"id\":\"outbound-date-2-jfxd9tja\",\"value\":\"JUN: 1(2), 2(2), 4(1), 11(1)\"}]},\"inbound\":{\"route\":\"Doha - São Paulo\",\"costs\":[{\"id\":\"inbound-cost-1-tm270oko\",\"value\":\"70K Milhas Avios Qatar + 870.00 QAR\"},{\"id\":\"inbound-cost-2-ksbgx2jp\",\"value\":\"94,5K Milhas Avios Qatar + 870.00 QAR\"}],\"dates\":[{\"id\":\"inbound-date-1-mm3t2r7l\",\"value\":\"ABR: 17(1)\"},{\"id\":\"inbound-date-2-ne3n947a\",\"value\":\"MAI: 1(1), 6(1), 17(1)\"},{\"id\":\"inbound-date-3-7hxibsw7\",\"value\":\"JUN: 5(1), 12(1)\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para 1 passageiro. Em parênteses os assentos disponíveis.\",\"generatedAtLine\":\"Pesquisa realizada no dia 05 de Abril.\"}}"
+  },
+  {
+    "id": "853b8ab9-eb6f-48dd-b901-009bc34864d5",
+    "template": "round-trip",
+    "route": "São Paulo - Doha",
+    "createdAt": "2026-05-09T21:51:16.975Z",
+    "payload": "{\"template\":\"round-trip\",\"title\":\"EXECUTIVA QATAR AIRWAYS\",\"themeKey\":\"executiva-com-milhas\",\"destinationImage\":\"/assets/destinations/placeholder-destination.svg\",\"destinationImageSettings\":{\"fit\":\"cover\",\"scale\":1,\"offsetX\":0,\"offsetY\":0},\"outbound\":{\"route\":\"São Paulo - Doha\",\"costs\":[{\"id\":\"outbound-cost-1-3wzyyz2o\",\"value\":\"70K Milhas Avios Qatar + R$ 1.108,24\"},{\"id\":\"outbound-cost-2-jtzmi07r\",\"value\":\"94,5K Milhas Avios Qatar + R$ 1.108,24\"}],\"dates\":[{\"id\":\"outbound-date-1-bc8hereq\",\"value\":\"MAI: 31(1)\"},{\"id\":\"outbound-date-2-jfxd9tja\",\"value\":\"JUN: 1(2), 2(2), 4(1), 11(1)\"}]},\"inbound\":{\"route\":\"Doha - São Paulo\",\"costs\":[{\"id\":\"inbound-cost-1-tm270oko\",\"value\":\"70K Milhas Avios Qatar + 870.00 QAR\"},{\"id\":\"inbound-cost-2-ksbgx2jp\",\"value\":\"94,5K Milhas Avios Qatar + 870.00 QAR\"}],\"dates\":[{\"id\":\"inbound-date-1-mm3t2r7l\",\"value\":\"ABR: 17(1)\"},{\"id\":\"inbound-date-2-ne3n947a\",\"value\":\"MAI: 1(1), 6(1), 17(1)\"},{\"id\":\"inbound-date-3-7hxibsw7\",\"value\":\"JUN: 5(1), 12(1)\"}]},\"footer\":{\"primaryLine\":\"Alerta para uso próprio. Não encaminhar para outros grupos.\",\"secondaryLine\":\"Pesquisa realizada para 1 passageiro. Em parênteses os assentos disponíveis.\",\"generatedAtLine\":\"Pesquisa realizada no dia 05 de Abril.\"}}"
+  },
+  {
     "id": "2d2c6a2a-32e3-458c-86af-277b197e1c09",
     "template": "round-trip",
     "route": "São Paulo - Recife",

@@ -63,7 +63,7 @@ export function PreviewScaffold({ payload, children }: PreviewScaffoldProps) {
               left: 25,
               top: 935,
               width: 1030,
-              color: theme.primaryColor,
+              color: theme.obsTextColor,
               fontWeight: getFontWeightForVariant(footerFontWeights.footerPrimary)
             }}
           >
