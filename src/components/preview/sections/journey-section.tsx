@@ -10,6 +10,7 @@ interface JourneySectionProps {
   datesFontWeight: number;
   orLabelFontWeight: number;
   dense?: boolean;
+  noMarginBottom?: boolean;
 }
 
 export function JourneySection({
@@ -19,13 +20,14 @@ export function JourneySection({
   costFontWeight,
   datesFontWeight,
   orLabelFontWeight,
-  dense = false
+  dense = false,
+  noMarginBottom = false
 }: JourneySectionProps) {
   const costs = normalizeListText(block.costs);
   const dates = normalizeListText(block.dates);
 
   return (
-    <section style={{ ...styles.container, marginBottom: dense ? 34 : 46 }}>
+    <section style={{ ...styles.container, marginBottom: noMarginBottom ? 0 : (dense ? 34 : 46) }}>
       <div
         data-fit-text
         data-fit-text-lines="2"

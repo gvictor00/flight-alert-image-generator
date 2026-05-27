@@ -13,46 +13,53 @@ export function RoundTripPreview({ payload }: RoundTripPreviewProps) {
     ...sharedStyles.leftColumn,
     left: theme.mainTextOverlay.x,
     top: theme.mainTextOverlay.roundTripY,
-    width: theme.mainTextOverlay.width
+    width: theme.mainTextOverlay.width,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    height: 920
   };
   const fontWeights = theme.textFontVariants;
 
   return (
     <PreviewScaffold payload={payload}>
       <section style={leftColumnStyle} data-scale-to-fit="920">
-        <header>
+        <header style={{ flexShrink: 0 }}>
           <div
             data-fit-text
             data-fit-text-lines="2"
             data-fit-text-min="20"
             data-fit-text-base="31"
-            style={{ ...sharedStyles.title, color: theme.primaryColor, fontWeight: getFontWeightForVariant(fontWeights.title) }}
+            style={{ ...sharedStyles.title, color: theme.primaryColor, marginBottom: 0, fontWeight: getFontWeightForVariant(fontWeights.title) }}
           >
             {payload.title}
           </div>
         </header>
 
-        <JourneySection
-          block={payload.outbound}
-          primaryColor={theme.primaryColor}
-          routeFontWeight={getFontWeightForVariant(fontWeights.route)}
-          costFontWeight={getFontWeightForVariant(fontWeights.cost)}
-          datesFontWeight={getFontWeightForVariant(fontWeights.dates)}
-          orLabelFontWeight={getFontWeightForVariant(fontWeights.orLabel)}
-          dense
-        />
-
-        {payload.inbound ? (
+        <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', maxWidth: 660, paddingRight: 8 }}>
           <JourneySection
-            block={payload.inbound}
+            block={payload.outbound}
             primaryColor={theme.primaryColor}
             routeFontWeight={getFontWeightForVariant(fontWeights.route)}
             costFontWeight={getFontWeightForVariant(fontWeights.cost)}
             datesFontWeight={getFontWeightForVariant(fontWeights.dates)}
             orLabelFontWeight={getFontWeightForVariant(fontWeights.orLabel)}
             dense
+            noMarginBottom
           />
-        ) : null}
+
+          {payload.inbound ? (
+            <JourneySection
+              block={payload.inbound}
+              primaryColor={theme.primaryColor}
+              routeFontWeight={getFontWeightForVariant(fontWeights.route)}
+              costFontWeight={getFontWeightForVariant(fontWeights.cost)}
+              datesFontWeight={getFontWeightForVariant(fontWeights.dates)}
+              orLabelFontWeight={getFontWeightForVariant(fontWeights.orLabel)}
+              dense
+              noMarginBottom
+            />
+          ) : null}
+        </div>
       </section>
     </PreviewScaffold>
   );
