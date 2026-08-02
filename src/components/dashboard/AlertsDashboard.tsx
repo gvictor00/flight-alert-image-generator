@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import type { AlertRecord, RouteSetting } from '@/lib/alerts/types';
+import { useEffect, useMemo, useState } from 'react';
+import { filterAlertsByPeriod } from '@/lib/alerts/dashboard-analytics';
+import type { AlertRecord, PeriodFilter, RouteSetting } from '@/lib/alerts/types';
 import type { AlertDraft } from '@/lib/canvas/types';
 import { HistoryTable } from './HistoryTable';
 import { NotionCsvImport } from './NotionCsvImport';
+import { OperatorStatsTable } from './OperatorStatsTable';
+import { PeriodFilterBar } from './PeriodFilterBar';
 import { RouteSuggestions } from './RouteSuggestions';
 import { StatsPanels } from './StatsPanels';
 
@@ -14,6 +17,8 @@ export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: A
   const [configured, setConfigured] = useState(true);
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(true);
+  const [periodFilter, setPeriodFilter] = useState<PeriodFilter>({ mode: 'today' });
+  const periodAlerts = useMemo(() => filterAlertsByPeriod(alerts, periodFilter), [alerts, periodFilter]);
 
   async function load() {
     setLoading(true);
@@ -114,6 +119,8 @@ export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: A
           </button>
         </header>
 
+        <PeriodFilterBar value={periodFilter} onChange={setPeriodFilter} />
+
         {status ? (
           <div className={`rounded-md border px-4 py-3 text-sm ${configured ? 'border-amber-200 bg-amber-50 text-amber-800 dark:border-[var(--ecm-gold)] dark:bg-[var(--ecm-blue-panel)] dark:text-[var(--ecm-gold)]' : 'border-zinc-200 bg-white text-zinc-600 dark:border-[var(--ecm-blue-border)] dark:bg-[var(--ecm-blue-surface)] dark:text-[var(--ecm-blue-muted)]'}`}>
             {status}
@@ -121,9 +128,10 @@ export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: A
         ) : null}
 
         <NotionCsvImport existingAlerts={alerts} onImported={addImportedAlerts} />
-        <StatsPanels alerts={alerts} routeSettings={routeSettings} />
+        <StatsPanels alerts={alerts} periodAlerts={periodAlerts} routeSettings={routeSettings} />
+        <OperatorStatsTable alerts={alerts} periodAlerts={periodAlerts} />
         <RouteSuggestions alerts={alerts} routeSettings={routeSettings} onRouteSettingSaved={saveRouteSetting} />
-        <HistoryTable alerts={alerts} onUpdate={updateAlert} onDelete={deleteAlert} onLoadSnapshot={onLoadSnapshot} />
+        <HistoryTable alerts={alerts} periodFilter={periodFilter} onUpdate={updateAlert} onDelete={deleteAlert} onLoadSnapshot={onLoadSnapshot} />
       </div>
     </main>
   );

@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ALERT_GROUPS, type AlertGroup, type AlertRecord } from '@/lib/alerts/types';
-import { dashTodayStr } from '@/lib/alerts/normalization';
+import { filterAlertsByPeriod } from '@/lib/alerts/dashboard-analytics';
+import { ALERT_GROUPS, normalizeAlertGroup, type AlertGroup, type AlertRecord, type PeriodFilter } from '@/lib/alerts/types';
 import { matchesAlertSearch } from '@/lib/alerts/dashboard';
 import type { AlertDraft } from '@/lib/canvas/types';
 
@@ -19,29 +19,28 @@ function snapshotFromAlert(alert: AlertRecord): AlertDraft | null {
 
 export function HistoryTable({
   alerts,
+  periodFilter,
   onUpdate,
   onDelete,
   onLoadSnapshot
 }: {
   alerts: AlertRecord[];
+  periodFilter: PeriodFilter;
   onUpdate(id: string, changes: Partial<AlertRecord>): Promise<void>;
   onDelete(alert: AlertRecord): Promise<void>;
   onLoadSnapshot(snapshot: AlertDraft): void;
 }) {
-  const [period, setPeriod] = useState<'today' | 'all'>('today');
   const [group, setGroup] = useState<AlertGroup | 'all'>('all');
   const [search, setSearch] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Partial<AlertRecord>>({});
-  const today = dashTodayStr();
 
   const visibleAlerts = useMemo(() => {
-    return alerts
-      .filter((alert) => period === 'all' || alert.data === today)
-      .filter((alert) => group === 'all' || alert.grupo === group)
+    return filterAlertsByPeriod(alerts, periodFilter)
+      .filter((alert) => group === 'all' || normalizeAlertGroup(alert.grupo) === group)
       .filter((alert) => matchesAlertSearch(alert, search))
       .sort((a, b) => `${b.data}-${b.created_at || ''}`.localeCompare(`${a.data}-${a.created_at || ''}`));
-  }, [alerts, group, period, search, today]);
+  }, [alerts, group, periodFilter, search]);
 
   function startEdit(alert: AlertRecord) {
     setEditingId(alert.id);
@@ -68,10 +67,6 @@ export function HistoryTable({
           <p className="text-sm text-zinc-500">{visibleAlerts.length} registros filtrados</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <select className={inputClass} value={period} onChange={(event) => setPeriod(event.target.value as 'today' | 'all')}>
-            <option value="today">Hoje</option>
-            <option value="all">Todos</option>
-          </select>
           <select className={inputClass} value={group} onChange={(event) => setGroup(event.target.value as AlertGroup | 'all')}>
             <option value="all">Todos os grupos</option>
             {ALERT_GROUPS.map((item) => (
