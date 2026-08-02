@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { buildAlertRecordForTheme, createAlert, groupForTheme, uploadCardJpeg } from '@/lib/alerts/client';
 import { createDefaultAlertDraft, defaultFooters, seatCountFooters, STANDARD_TYPOGRAPHY } from '@/lib/canvas/default-draft';
 import { destinationPhotoSlug, photoPathForDestination } from '@/lib/canvas/destination-photos';
@@ -315,7 +314,6 @@ export function AlertGenerator({ loadedDraft }: { loadedDraft?: AlertDraft | nul
             <button type="button" className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-bold text-white disabled:opacity-50 dark:bg-[var(--ecm-gold)] dark:text-[var(--ecm-blue-bg)]" onClick={handleZip} disabled={busy || !canGenerate}>
               {busy ? 'Gerando...' : 'Gerar todos'}
             </button>
-            <ThemeToggle />
           </div>
         </header>
 
@@ -446,10 +444,10 @@ export function AlertGenerator({ loadedDraft }: { loadedDraft?: AlertDraft | nul
             </section>
           </aside>
 
-          <section className="grid min-w-0 gap-4 pr-1 lg:h-full lg:min-h-0 lg:overflow-y-auto xl:grid-cols-4 xl:items-start">
+          <section className="grid min-w-0 content-start gap-4 pr-1 lg:h-full lg:min-h-0 lg:overflow-y-auto xl:grid-cols-2">
             {message ? (
               <div
-                className={`rounded-md border px-4 py-3 text-sm xl:col-span-4 ${
+                className={`rounded-md border px-4 py-3 text-sm xl:col-span-2 ${
                   messageTone === 'error'
                     ? 'border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200'
                     : messageTone === 'warning'
