@@ -52,3 +52,35 @@ export interface RouteSetting {
   route_key: string;
   min_days: number;
 }
+
+export interface PeriodFilter {
+  mode: 'today' | '7d' | '30d' | 'all' | 'custom';
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface ProgramStat {
+  name: string;
+  count: number;
+  percentage: number;
+}
+
+export interface OperatorStat {
+  operator: string;
+  generatedToday: number;
+  sentToday: number;
+  generatedInPeriod: number;
+  sentInPeriod: number;
+  lastAlert: string;
+}
+
+export interface RouteMatrixRow {
+  key: string;
+  origin: string;
+  destination: string;
+  groupDays: Partial<Record<AlertGroup, number | null>>;
+  status: 'Nunca enviada' | 'OK' | 'Atenção' | 'Vencida';
+  total: number;
+  minDays: number;
+  programs: string[];
+}
