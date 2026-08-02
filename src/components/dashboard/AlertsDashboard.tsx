@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { filterAlertsByPeriod } from '@/lib/alerts/dashboard-analytics';
 import type { AlertRecord, PeriodFilter, RouteSetting } from '@/lib/alerts/types';
 import type { AlertDraft } from '@/lib/canvas/types';
+import { AlertSummaryBuilder } from './AlertSummaryBuilder';
 import { HistoryTable } from './HistoryTable';
 import { NotionCsvImport } from './NotionCsvImport';
 import { OperatorStatsTable } from './OperatorStatsTable';
@@ -134,6 +135,7 @@ export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: A
         <ProgramStatsPanel alerts={alerts} sharedPeriod={periodFilter} />
         <RouteMatrixPanel alerts={alerts} routeSettings={routeSettings} onRouteSettingSaved={saveRouteSetting} />
         <HistoryTable alerts={alerts} periodFilter={periodFilter} onUpdate={updateAlert} onDelete={deleteAlert} onLoadSnapshot={onLoadSnapshot} />
+        <AlertSummaryBuilder alerts={periodAlerts} />
       </div>
     </main>
   );

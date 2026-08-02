@@ -68,7 +68,7 @@ function splitAirlines(value: string) {
 function milesParts(value: string) {
   const matches = value.match(MILES_RE) || [];
   if (matches.length >= 2 && /\s+a\s+/i.test(value)) {
-    return { milesType: 'range' as const, miles: '', minimumMiles: matches[0].trim(), maximumMiles: matches[1].trim() };
+    return { milesType: 'range' as const, miles: '', minimumMiles: (matches[0] || '').trim(), maximumMiles: (matches[1] || '').trim() };
   }
   return { milesType: 'fixed' as const, miles: matches[0]?.trim() || '', minimumMiles: '', maximumMiles: '' };
 }
