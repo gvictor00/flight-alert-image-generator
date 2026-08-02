@@ -8,7 +8,8 @@ import { HistoryTable } from './HistoryTable';
 import { NotionCsvImport } from './NotionCsvImport';
 import { OperatorStatsTable } from './OperatorStatsTable';
 import { PeriodFilterBar } from './PeriodFilterBar';
-import { RouteSuggestions } from './RouteSuggestions';
+import { ProgramStatsPanel } from './ProgramStatsPanel';
+import { RouteMatrixPanel } from './RouteMatrixPanel';
 import { StatsPanels } from './StatsPanels';
 
 export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: AlertDraft): void }) {
@@ -130,7 +131,8 @@ export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: A
         <NotionCsvImport existingAlerts={alerts} onImported={addImportedAlerts} />
         <StatsPanels alerts={alerts} periodAlerts={periodAlerts} routeSettings={routeSettings} />
         <OperatorStatsTable alerts={alerts} periodAlerts={periodAlerts} />
-        <RouteSuggestions alerts={alerts} routeSettings={routeSettings} onRouteSettingSaved={saveRouteSetting} />
+        <ProgramStatsPanel alerts={alerts} sharedPeriod={periodFilter} />
+        <RouteMatrixPanel alerts={alerts} routeSettings={routeSettings} onRouteSettingSaved={saveRouteSetting} />
         <HistoryTable alerts={alerts} periodFilter={periodFilter} onUpdate={updateAlert} onDelete={deleteAlert} onLoadSnapshot={onLoadSnapshot} />
       </div>
     </main>
