@@ -1,56 +1,54 @@
 # flight-alert-image-generator
 
-Protótipo inicial da plataforma interna de geração de imagens de alertas aéreos.
+Aplicacao interna para gerar imagens de alertas aereos e acompanhar historico operacional de envio.
 
 ## Stack
 
 - Next.js 15
 - React 19
 - TypeScript
-- Playwright
-- Zod
-
-## Objetivo desta etapa
-
-Entregar o núcleo do sistema para:
-
-- editar dados manualmente em uma UI simples;
-- pré-visualizar a imagem no navegador;
-- renderizar a imagem final em PNG 1080x1080;
-- salvar histórico mínimo das gerações.
-
-## Estrutura principal
-
-- `app/` rotas e API routes
-- `src/components/forms/` formulário do operador
-- `src/components/preview/` componente visual compartilhado entre preview e renderização final
-- `src/lib/rendering/` engine de render, documento HTML estático e persistência simples de histórico
-- `src/lib/templates/` tipos, temas e payload de exemplo
-- `src/lib/validation/` schema de validação
-- `public/assets/` imagens e placeholders
-- `output/` imagens exportadas
-- `data/history.json` histórico inicial
+- Canvas API client-side
+- Supabase Postgres/Storage para dashboard e historico
+- Vitest
 
 ## Como rodar
 
-```bash
+```powershell
+$env:Path += ";C:\Projects\node20"
 npm install
-npx playwright install chromium
 npm run dev
 ```
 
-Depois, abra o projeto no navegador e use o botão **Gerar PNG**.
+Depois, abra o endereco indicado pelo Next no navegador.
 
-## Observações
+## Supabase Setup
 
-- Nesta etapa, a aplicação usa placeholders visuais para destino e avião.
-- A heurística de shrink dinâmico de fonte ainda não foi implementada.
-- O contrato JSON já existe e está preparado para futura API externa.
+1. Crie um projeto no Supabase.
+2. Execute `docs/db/supabase-alerts-schema.sql` no SQL editor.
+3. Crie um Storage bucket publico chamado `alert-cards`.
+4. Copie `.env.example` para `.env.local`.
+5. Preencha `SUPABASE_URL`, `SUPABASE_ANON_KEY` e, se necessario, `SUPABASE_STORAGE_BUCKET`.
+6. Reinicie o servidor Next.
 
+O arquivo `.env.example` e apenas um modelo. O Next carrega `.env.local` durante o desenvolvimento local.
 
-## Última atualização
+O gerador funciona sem Supabase. Dashboard, historico, importacao CSV, status de envio e arquivo de JPEGs gerados dependem do Supabase.
 
-- Separação do preview em variantes reais de template (`one-way` e `round-trip`)
-- Extração da estrutura compartilhada do canvas
-- Criação de helper para troca segura de template
-- Atualização do `package.json` para as versões informadas
+## Estrutura principal
+
+- `src/app/`: pagina principal e API routes internas.
+- `src/components/generator/`: controles, preview e exportacao dos cards.
+- `src/components/dashboard/`: dashboard, historico, importacao CSV e sugestoes de rotas.
+- `src/lib/canvas/`: renderizacao canvas client-side.
+- `src/lib/alerts/`: tipos, normalizacao, importacao e helpers de dashboard.
+- `src/lib/server/`: cliente Supabase server-side.
+- `public/assets/`: logos, aviao e banco estatico de destinos.
+- `docs/db/`: schema SQL do Supabase.
+
+## Verificacao
+
+```powershell
+$env:Path += ";C:\Projects\node20"
+npm test
+npm run build
+```

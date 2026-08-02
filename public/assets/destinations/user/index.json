@@ -1,0 +1,122 @@
+﻿{
+  "boston": {
+    "destination": "Boston",
+    "path": "/assets/destinations/user/boston.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-07-19T17:53:53.269Z"
+  },
+  "fort-lauderdale": {
+    "destination": "Fort Lauderdale",
+    "path": "/assets/destinations/user/fort-lauderdale.jpg",
+    "mimeType": "image/jpeg",
+    "updatedAt": "2026-07-25T13:53:32.027Z"
+  },
+  "campinas": {
+    "destination": "Campinas",
+    "path": "/assets/destinations/user/campinas.jpg",
+    "mimeType": "image/jpeg",
+    "updatedAt": "2026-07-25T14:59:50.258Z"
+  },
+  "berlim": {
+    "destination": "Berlim",
+    "path": "/assets/destinations/user/BER.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T15:59:07.1184730Z"
+  },
+  "bangkok": {
+    "destination": "Bangkok",
+    "path": "/assets/destinations/user/BKK.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:20:03.5952531Z"
+  },
+  "bolonha": {
+    "destination": "Bolonha",
+    "path": "/assets/destinations/user/BLQ.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T14:03:10.3522494Z"
+  },
+  "bogota": {
+    "destination": "Bogotá",
+    "path": "/assets/destinations/user/BOG.jpg",
+    "mimeType": "image/jpeg",
+    "updatedAt": "2026-05-02T17:48:36.7149523Z"
+  },
+  "copenhague": {
+    "destination": "Copenhague",
+    "path": "/assets/destinations/user/CPH.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:23:21.8452046Z"
+  },
+  "cancun": {
+    "destination": "Cancun",
+    "path": "/assets/destinations/user/CUN.jpg",
+    "mimeType": "image/jpeg",
+    "updatedAt": "2026-05-23T23:09:31.7790622Z"
+  },
+  "buenos-aires": {
+    "destination": "Buenos Aires",
+    "path": "/assets/destinations/user/eze.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-07-18T20:23:06.9422752Z"
+  },
+  "roma": {
+    "destination": "Roma",
+    "path": "/assets/destinations/user/FCO.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:25:21.1533317Z"
+  },
+  "frankfurt": {
+    "destination": "Frankfurt",
+    "path": "/assets/destinations/user/FRA.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:19:35.3070712Z"
+  },
+  "zurique": {
+    "destination": "Zurique",
+    "path": "/assets/destinations/user/GVA.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:22:58.1081977Z"
+  },
+  "helsinki": {
+    "destination": "Helsinki",
+    "path": "/assets/destinations/user/HEL.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:26:15.4480877Z"
+  },
+  "phuket": {
+    "destination": "Phuket",
+    "path": "/assets/destinations/user/HKT.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:18:18.3873140Z"
+  },
+  "los-angeles": {
+    "destination": "Los Angeles",
+    "path": "/assets/destinations/user/LAX.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:25:55.4708435Z"
+  },
+  "orlando": {
+    "destination": "Orlando",
+    "path": "/assets/destinations/user/MCO.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:18:57.0031287Z"
+  },
+  "munique": {
+    "destination": "Munique",
+    "path": "/assets/destinations/user/MUC.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:20:29.6986623Z"
+  },
+  "recife": {
+    "destination": "Recife",
+    "path": "/assets/destinations/user/REC.webp",
+    "mimeType": "image/webp",
+    "updatedAt": "2026-05-02T02:01:42.5560242Z"
+  },
+  "sydney": {
+    "destination": "Sydney",
+    "path": "/assets/destinations/user/SYD.png",
+    "mimeType": "image/png",
+    "updatedAt": "2026-05-16T13:21:07.6264628Z"
+  }
+}

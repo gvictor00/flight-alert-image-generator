@@ -1,13 +1,22 @@
 # Node.js dependencies
 node_modules
 
+# Local environment
+.env*.local
+
 # Next.js build output
 .next
+.next-dev.err
+.next-dev.log
+tsconfig.tsbuildinfo
 
 # Output data
 output/*.png
 output/*.jpeg
 output/*.jpg
+
+# Local tool state
+.playwright-mcp/
 
 # Claude Code elements
 *.instructions.md

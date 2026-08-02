@@ -4,6 +4,14 @@
 
 :root {
   color-scheme: light;
+  --ecm-blue-bg: #07182f;
+  --ecm-blue-surface: #0c2341;
+  --ecm-blue-panel: #102d52;
+  --ecm-blue-border: #1f4f80;
+  --ecm-blue-muted: #8fb8dc;
+  --ecm-blue-text: #eef7ff;
+  --ecm-blue-accent: #5aa7ff;
+  --ecm-gold: #f1c469;
 }
 
 .dark {
@@ -24,7 +32,7 @@
 
   body {
     @apply bg-slate-100 text-slate-800 antialiased;
-    @apply dark:bg-zinc-950 dark:text-zinc-100;
+    @apply dark:bg-[var(--ecm-blue-bg)] dark:text-[var(--ecm-blue-text)];
     background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 40%);
   }
 
