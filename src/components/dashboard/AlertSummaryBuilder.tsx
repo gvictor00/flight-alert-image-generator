@@ -21,13 +21,29 @@ function emptyItem(displayProgram: string): AlertSummaryItem {
     destinationCountry: '',
     destinationFlag: '',
     airlines: [],
-    cabin: '',
+    isFirstClass: false,
     milesType: 'fixed',
     miles: '',
     minimumMiles: '',
     maximumMiles: '',
     displayProgram,
     notes: ''
+  };
+}
+
+function normalizeDraft(draft: AlertSummaryDraft): AlertSummaryDraft {
+  return {
+    ...draft,
+    programs: draft.programs.map((program) => ({
+      ...program,
+      alerts: program.alerts.map((item) => {
+        const legacy = item as AlertSummaryItem & { cabin?: string };
+        return {
+          ...item,
+          isFirstClass: Boolean(item.isFirstClass || legacy.cabin?.trim().toLowerCase() === '1st')
+        };
+      })
+    }))
   };
 }
 
@@ -39,9 +55,23 @@ function move<T>(items: T[], index: number, direction: -1 | 1) {
   return next;
 }
 
+function labelFromDateWindow(startDate: string, endDate: string) {
+  const format = (value: string) => value ? value.slice(5).split('-').reverse().join('/') : '';
+  const start = format(startDate);
+  const end = format(endDate);
+  if (start && end && start !== end) return `${start}-${end}`;
+  return start || end || '';
+}
+
+function filterByWindow(alerts: AlertRecord[], startDate: string, endDate: string) {
+  return alerts.filter((alert) => (!startDate || alert.data >= startDate) && (!endDate || alert.data <= endDate));
+}
+
 export function AlertSummaryBuilder({ alerts }: { alerts: AlertRecord[] }) {
   const [collapsed, setCollapsed] = useState(true);
   const [draft, setDraft] = useState<AlertSummaryDraft>(() => createSummaryDraftFromAlerts(alerts));
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [message, setMessage] = useState('');
   const output = useMemo(() => generateWhatsAppSummary(draft), [draft]);
   const completeCount = draft.programs.flatMap((program) => program.alerts).filter((item) => validateSummaryItem(item).length === 0).length;
@@ -55,7 +85,7 @@ export function AlertSummaryBuilder({ alerts }: { alerts: AlertRecord[] }) {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     try {
-      setDraft(JSON.parse(raw) as AlertSummaryDraft);
+      setDraft(normalizeDraft(JSON.parse(raw) as AlertSummaryDraft));
       setMessage('Rascunho carregado.');
     } catch {
       setMessage('Nao foi possivel carregar o rascunho salvo.');
@@ -63,8 +93,11 @@ export function AlertSummaryBuilder({ alerts }: { alerts: AlertRecord[] }) {
   }
 
   function regenerate() {
-    setDraft(createSummaryDraftFromAlerts(alerts, draft.date, draft.profile));
-    setMessage('Resumo regenerado pelo historico.');
+    const label = labelFromDateWindow(startDate, endDate);
+    const date = label || draft.date;
+    const next = createSummaryDraftFromAlerts(alerts, date, draft.profile, { startDate, endDate });
+    setDraft(next);
+    setMessage(`Resumo regenerado pelo historico carregado do Supabase: ${filterByWindow(alerts, startDate, endDate).length} alerta(s) na janela.`);
   }
 
   function saveDraft() {
@@ -166,7 +199,9 @@ export function AlertSummaryBuilder({ alerts }: { alerts: AlertRecord[] }) {
       {!collapsed ? (
         <div className="mt-4 grid gap-4 xl:grid-cols-[1fr_420px]">
           <div className="grid gap-4">
-            <div className="grid gap-3 md:grid-cols-[160px_1fr_auto]">
+            <div className="grid gap-3 md:grid-cols-[140px_140px_160px_1fr_auto]">
+              <label className="grid gap-1 text-xs font-semibold text-zinc-500 dark:text-[var(--ecm-blue-muted)]">Inicio histórico<input className={inputClass} type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} /></label>
+              <label className="grid gap-1 text-xs font-semibold text-zinc-500 dark:text-[var(--ecm-blue-muted)]">Fim histórico<input className={inputClass} type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} /></label>
               <label className="grid gap-1 text-xs font-semibold text-zinc-500 dark:text-[var(--ecm-blue-muted)]">Data<input className={inputClass} value={draft.date} onChange={(event) => setDraft((current) => ({ ...current, date: event.target.value }))} /></label>
               <label className="grid gap-1 text-xs font-semibold text-zinc-500 dark:text-[var(--ecm-blue-muted)]">Perfil<input className={inputClass} value={draft.profile} onChange={(event) => setDraft((current) => ({ ...current, profile: event.target.value }))} /></label>
               <button type="button" className={`${buttonClass} self-end`} onClick={addProgram}>Adicionar programa</button>
@@ -198,7 +233,10 @@ export function AlertSummaryBuilder({ alerts }: { alerts: AlertRecord[] }) {
                         </select>
                         <input className={inputClass} value={item.destinationFlag} placeholder="Bandeira" onChange={(event) => patchItem(program.id, item.id, { destinationFlag: event.target.value })} />
                         <input className={inputClass} value={item.airlines.join(' ou ')} placeholder="Companhias" onChange={(event) => patchItem(program.id, item.id, { airlines: event.target.value.split(/\s+ou\s+/i).map((value) => value.trim()).filter(Boolean) })} />
-                        <input className={inputClass} value={item.cabin} placeholder="Cabine" onChange={(event) => patchItem(program.id, item.id, { cabin: event.target.value })} />
+                        <label className="flex min-h-9 items-center gap-2 rounded-md border border-zinc-300 px-2 py-1.5 text-sm dark:border-[var(--ecm-blue-border)]">
+                          <input type="checkbox" checked={item.isFirstClass} onChange={(event) => patchItem(program.id, item.id, { isFirstClass: event.target.checked })} />
+                          First (1st)
+                        </label>
                         <select className={inputClass} value={item.milesType} onChange={(event) => patchItem(program.id, item.id, { milesType: event.target.value as AlertSummaryItem['milesType'] })}>
                           <option value="fixed">Valor fixo</option>
                           <option value="range">Faixa</option>

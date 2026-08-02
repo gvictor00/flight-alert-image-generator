@@ -87,9 +87,9 @@ export function RouteMatrixPanel({ alerts, routeSettings, onRouteSettingSaved }:
         </div>
       </div>
       {error ? <p className="mt-2 text-sm font-semibold text-red-700 dark:text-red-300">{error}</p> : null}
-      <div className="mt-4 overflow-x-auto">
+      <div className="mt-4 max-h-[860px] overflow-auto">
         <table className="w-full min-w-[980px] text-left text-sm">
-          <thead className="text-xs uppercase text-zinc-500">
+          <thead className="sticky top-0 bg-white text-xs uppercase text-zinc-500 dark:bg-[var(--ecm-blue-surface)]">
             <tr>
               <th className="py-2 pr-3">Rota</th>
               {GROUP_COLUMNS.map(([, label]) => <th key={label} className="py-2 pr-3">{label}</th>)}

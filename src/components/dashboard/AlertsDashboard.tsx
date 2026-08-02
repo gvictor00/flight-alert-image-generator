@@ -135,7 +135,7 @@ export function AlertsDashboard({ onLoadSnapshot }: { onLoadSnapshot(snapshot: A
         <ProgramStatsPanel alerts={alerts} sharedPeriod={periodFilter} />
         <RouteMatrixPanel alerts={alerts} routeSettings={routeSettings} onRouteSettingSaved={saveRouteSetting} />
         <HistoryTable alerts={alerts} periodFilter={periodFilter} onUpdate={updateAlert} onDelete={deleteAlert} onLoadSnapshot={onLoadSnapshot} />
-        <AlertSummaryBuilder alerts={periodAlerts} />
+        <AlertSummaryBuilder alerts={alerts} />
       </div>
     </main>
   );

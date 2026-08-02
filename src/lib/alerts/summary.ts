@@ -20,7 +20,7 @@ export interface AlertSummaryItem {
   destinationCountry: string;
   destinationFlag: string;
   airlines: string[];
-  cabin: string;
+  isFirstClass: boolean;
   milesType: 'fixed' | 'range';
   miles: string;
   minimumMiles: string;
@@ -29,17 +29,42 @@ export interface AlertSummaryItem {
   notes: string;
 }
 
+export interface SummaryDateWindow {
+  startDate?: string;
+  endDate?: string;
+}
+
 export const COUNTRY_FLAGS = [
-  { country: 'Japao', flag: '🇯🇵' },
-  { country: 'Tailandia', flag: '🇹🇭' },
-  { country: 'Colombia', flag: '🇨🇴' },
-  { country: 'Estados Unidos', flag: '🇺🇸' },
-  { country: 'Portugal', flag: '🇵🇹' },
-  { country: 'Espanha', flag: '🇪🇸' },
-  { country: 'Franca', flag: '🇫🇷' },
   { country: 'Alemanha', flag: '🇩🇪' },
+  { country: 'Argentina', flag: '🇦🇷' },
+  { country: 'Australia', flag: '🇦🇺' },
+  { country: 'Brasil', flag: '🇧🇷' },
+  { country: 'Canada', flag: '🇨🇦' },
+  { country: 'Chile', flag: '🇨🇱' },
+  { country: 'China', flag: '🇨🇳' },
+  { country: 'Colombia', flag: '🇨🇴' },
+  { country: 'Coreia do Sul', flag: '🇰🇷' },
+  { country: 'Catar', flag: '🇶🇦' },
+  { country: 'Emirados Arabes Unidos', flag: '🇦🇪' },
+  { country: 'Espanha', flag: '🇪🇸' },
+  { country: 'Estados Unidos', flag: '🇺🇸' },
+  { country: 'Franca', flag: '🇫🇷' },
+  { country: 'Grecia', flag: '🇬🇷' },
+  { country: 'Holanda', flag: '🇳🇱' },
+  { country: 'India', flag: '🇮🇳' },
+  { country: 'Indonesia', flag: '🇮🇩' },
+  { country: 'Irlanda', flag: '🇮🇪' },
   { country: 'Italia', flag: '🇮🇹' },
-  { country: 'Mexico', flag: '🇲🇽' }
+  { country: 'Japao', flag: '🇯🇵' },
+  { country: 'Malasia', flag: '🇲🇾' },
+  { country: 'Mexico', flag: '🇲🇽' },
+  { country: 'Nova Zelandia', flag: '🇳🇿' },
+  { country: 'Portugal', flag: '🇵🇹' },
+  { country: 'Reino Unido', flag: '🇬🇧' },
+  { country: 'Singapura', flag: '🇸🇬' },
+  { country: 'Suica', flag: '🇨🇭' },
+  { country: 'Tailandia', flag: '🇹🇭' },
+  { country: 'Turquia', flag: '🇹🇷' }
 ];
 
 const MILES_RE = /\b\d+[\d.,]*\s*K?\b/gi;
@@ -77,6 +102,13 @@ function displayProgramFromText(value: string) {
   return detectPrograms(value)[0] || '';
 }
 
+function isInsideWindow(alert: AlertRecord, dateWindow?: SummaryDateWindow) {
+  if (!dateWindow) return true;
+  if (dateWindow.startDate && alert.data < dateWindow.startDate) return false;
+  if (dateWindow.endDate && alert.data > dateWindow.endDate) return false;
+  return true;
+}
+
 export function validateSummaryItem(item: AlertSummaryItem) {
   const missing: string[] = [];
   if (!item.origin.trim()) missing.push('origem');
@@ -91,7 +123,7 @@ export function validateSummaryItem(item: AlertSummaryItem) {
 
 function alertText(item: AlertSummaryItem) {
   const airline = item.airlines.map((name) => name.toUpperCase()).join(' ou ');
-  const airlineLine = item.cabin.trim() ? `${airline}(${item.cabin.trim()})` : airline;
+  const airlineLine = item.isFirstClass ? `${airline}(1st)` : airline;
   const milesLine = item.milesType === 'range'
     ? `${item.minimumMiles} a ${item.maximumMiles} Milhas ${item.displayProgram}`
     : `${item.miles} Milhas ${item.displayProgram}`;
@@ -110,9 +142,9 @@ export function generateWhatsAppSummary(draft: AlertSummaryDraft) {
   return [`RESUMO ALERTAS (${draft.date})`, groups.join(`\n${SEPARATOR}\n`), draft.profile].filter(Boolean).join('\n\n');
 }
 
-export function createSummaryDraftFromAlerts(alerts: AlertRecord[], date = formatDefaultDate(), profile = '@executivacommilhas'): AlertSummaryDraft {
+export function createSummaryDraftFromAlerts(alerts: AlertRecord[], date = formatDefaultDate(), profile = '@executivacommilhas', dateWindow?: SummaryDateWindow): AlertSummaryDraft {
   const programs = new Map<string, AlertSummaryProgram>();
-  for (const alert of alerts) {
+  for (const alert of alerts.filter((item) => isInsideWindow(item, dateWindow))) {
     const displayProgram = displayProgramFromText(alert.programa || '');
     if (!displayProgram) continue;
     const program = programs.get(displayProgram) || { id: slug(displayProgram), name: displayProgram, alerts: [] };
@@ -124,7 +156,7 @@ export function createSummaryDraftFromAlerts(alerts: AlertRecord[], date = forma
       destinationCountry: '',
       destinationFlag: '',
       airlines: splitAirlines(alert.cia || ''),
-      cabin: '',
+      isFirstClass: false,
       displayProgram,
       notes: alert.obs || '',
       ...miles

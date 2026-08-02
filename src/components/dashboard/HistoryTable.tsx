@@ -77,9 +77,9 @@ export function HistoryTable({
         </div>
       </div>
 
-      <div className="mt-4 overflow-x-auto">
+      <div className="mt-4 max-h-[920px] overflow-auto">
         <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
-          <thead className="text-xs uppercase text-zinc-500">
+          <thead className="sticky top-0 bg-white text-xs uppercase text-zinc-500 dark:bg-[var(--ecm-blue-surface)]">
             <tr className="border-b border-zinc-200 dark:border-[var(--ecm-blue-border)]">
               <th className="py-2 pr-3">Data</th>
               <th className="py-2 pr-3">Origem</th>
